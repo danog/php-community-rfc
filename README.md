@@ -99,15 +99,29 @@ Once a feature is accepted into `php-community` and community adoption reaches a
 
 The 6 months lower limit before conversion into a normal RFC is pretty much the only "hard" limit in community RFCs: with an excessively short feedback time authors may end up making RFCs without significant community adoption/feedback, which is essentially equivalent to doing RFCs with the old process.  
 
-### Release schedule
+### Release process
 
 Versioning will be date-based, i.e. `php-community 2026.01.01`.  
 
 `php-community` will always be based on the latest stable PHP release, and will be released according to the following schedule:
 
-- One stable release every month, the first of the month.  
+- One stable release every month, the first Thursday of the month.  
 - Security releases do not postpone the main release schedule, even if it means making two releases in two days, i.e. the 31st and the 1st (`php-community 2026.01.31` and `php-community 2026.02.01`), or the 1st and the 2nd (`php-community 2026.02.01` and `php-community 2026.02.02`).   
 - Full nightly releases (with binaries) every day for even faster iteration (`php-community-nightly 2026.01.01`).  
+
+`php-community` will live on a new `community` branch of `php-src`.  
+
+Community releases are "handled" by the same release managers of the latest stable PHP release, however the release process will be significantly automated, compared to the current manual release process:
+
+- Binary, packaged and source releases for both stable and nightly will be reproducible, auto-built and published to `php.net` by Github Actions on php-src, without human involvement (which also improves security).  
+- Release managers only need to:
+  - Branch off `community-202X.XX.XX` from `community`
+  - Wait for the CI status of the new branch to become green
+  - Create a new `php-community-202X.XX.XX` tag
+  - Wait for the CI status of the tag to become green, which will automatically build and stage all binaries and packages for all platforms.  
+    The final deployment step, deploying all staged binaries and packages and sending off an email to the mailing lists will also be automatic, based on the statuses of all builds for all platforms.  
+
+    Human involvement is only needed in case of errors in any of the CI jobs, fixed by committing first to the `community` branch, then pushing to the `community-202X.XX.XX` branch, eventually re-creating the `php-community-202X.XX.XX` tag if the failure occurred only in the tag CI build.  
 
 ### Details
 
