@@ -45,7 +45,7 @@ Community RFCs will have a significantly leaner and relaxed community RFC proces
 
 This process is intentionally lean and non-specific to allow for quicker iteration, and is heavily inspired by [Golang's lean proposal process](https://go.dev/s/proposal-process).  
 
-- Community RFCs are proposed as simple GitHub issues to a separate php/php-community-rfcs repository.
+- Community RFCs are proposed as simple GitHub issues to a separate php/php-community-rfcs repository, maintained by all current internals members.
   It can be a simple proposal, without a full design document.
   As discussion proceeds, a design document (which will be eventually used for the full, non-community RFC) can be provided as a pull request, committed to the same repo once the RFC is accepted.  
 
