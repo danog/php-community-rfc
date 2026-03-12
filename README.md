@@ -70,7 +70,7 @@ Community RFCs will have a significantly leaner and relaxed community RFC proces
   - 2-3 weeks after the issue is moved to the Voting stage OR
   - 3 months after the issue is opened
   
-  Results are valid if at least 50% of internals has voted (including abstain).
+  Results are valid if at least 50% of internals has voted (including abstain).  
 
   Voting results are fetched using the [gather_votes.php](https://github.com/danog/php-community-rfc/blob/main/gather_votes.php) script, which can be easily run by anyone at any time to get up-to-date voting results with a breakdown of internals and community votes, and the overall outcome.  
 
@@ -171,6 +171,11 @@ final class PhpFeature {
      * @return array<string, PhpFeature>
      */
     public static function getEnabledFeatures(): array;
+
+    /**
+     * Checks if a feature exists, or if a (possibly constrained) version of a feature exists.  
+     */
+    public static function has(string $feature, ?string $version = null): bool;
 
     /**
      * Fetches a feature extension by its name and its exact or constrainted version.  
