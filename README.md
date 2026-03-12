@@ -93,7 +93,7 @@ Please note: the intent of this leaner process is **not** to bypass the existing
   This is done because of the inherently mutable nature of php-community features: changes will likely be frequent, and updating rationale, examples and everything else that a full RFC requires will be mostly wasted work.
   
   The design document should be finalized, including full examples, major arguments from the community discussion and community feedback and adoption data only when turning it into a normal RFC.
-
+  
 - Once a community RFC is accepted and community adoption of the newly introduced features reaches a threshold (at the discretion of who proposed and implemented the community RFC, with involvement of the community), and in any case **at least** 6 months after its inclusion into a stable tag of `php-community`, a normal RFC can be proposed for inclusion into the main language.  
 
   The 6 months lower limit before conversion into a normal RFC is pretty much the only "hard" limit in community RFCs: with an excessively short feedback time authors may end up making RFCs without significant community adoption/feedback, which is essentially equivalent to doing RFCs with the old process.  
