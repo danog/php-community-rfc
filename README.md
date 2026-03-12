@@ -13,7 +13,9 @@ Experimental features distributed through `php-community` can be:
 
 Experimental features are offered as special PHP *feature extensions* **built into PHP by default**.  
 
-These special *feature extensions* are **versioned** and **disabled by default**, and can easily enabled with a single `PhpFeature::get($name, $version)->enable()` call (i.e. automatically invoked by the Composer autoloader).  
+These special *feature extensions* are **versioned** with semver and **disabled by default**, and can easily enabled with a single `PhpFeature::get($name, $version)->enable()` call (i.e. automatically invoked by the Composer autoloader).  
+
+*Feature extensions* can rely or conflict with specific versions of other feature extensions.  
 
 *Feature extensions* **cannot** be enabled using php.ini, to distinguish them from normal extensions.  
 
@@ -39,13 +41,20 @@ Distributing major (and minor) language changes in an easily accessible manner, 
 
 ### The community RFC process
 
-Community RFCs will have a significantly leaner and relaxed community RFC process, designed for both speed and quality:
+Community RFCs will have a significantly leaner and relaxed community RFC process, designed for both speed and quality.  
+
+This process is intentionally lean and non-specific to allow for quicker iteration, and is heavily inspired by [Golang's lean proposal process](https://go.dev/s/proposal-process).  
 
 - Community RFCs are proposed as simple GitHub issues to a separate php/php-community-rfcs repository.
   It can be a simple proposal, without a full design document.
-  As discussion proceeds, a design document (which will be eventually be used for the full, non-community RFC) can be provided as a pull request, committed to the same repo once the RFC is accepted.  
+  As discussion proceeds, a design document (which will be eventually used for the full, non-community RFC) can be provided as a pull request, committed to the same repo once the RFC is accepted.  
 
-  Once a feature is accepted, both breaking and non-breaking changes to that feature can occur without separate RFCs, however a changelog should always be posted to the community RFC issue, by editing the first comment of the issue.
+  Once a feature is accepted, both breaking and non-breaking changes to all code related to that feature can occur through pull requests to php-src without separate community RFCs, however a changelog should always be posted to the community RFC issue, by posting a new comment with the changelog and editing the first comment of the issue to point to the new comment.  
+
+  Note: code and design-based breaking changes related to the subject of the community RFC are allowed without creating new community RFCs, only a major version bump is required, however only within the scope of the original RFC, for example:
+
+  - Removing the deprecated `curl_close` function in the context of a `cleanup` feature centered around removing deprecated functions is allowed in a new major version of the `cleanup` feature.  
+  - Removing the deprecated `curl_close` function in the context of an `async_http_client` feature unrelated to curl is **not** allowed even in a new major version.  
 
   Once a feature is accepted, a design document must be committed to the repo, and kept updated with breaking/non-breaking changes: however, a fully detailed design document with full rationale, pro/counter arguments that will be turned into a full RFC is NOT required.  
   
@@ -56,18 +65,18 @@ Community RFCs will have a significantly leaner and relaxed community RFC proces
 
 - Community RFC states:
   - Pending
-  - Voting
+  - Active
   - Accepted
   - Rejected
 
   The state is specified through appropriate issue labels, that can only be edited by internals members.  
 
-- Voting is immediately open (Pending), and occurs through:
+- Voting is immediately open (at the Pending stage), and occurs through:
   - Simple GitHub 👍 = Accept, 👎 = Reject reactions on the issue, open to the entire PHP community, accounting for 50% of votes, simple majority.
   - internals members through GitHub 👍 = Accept, 👎 = Reject, 👀 = Abstain reactions on the issue using their GitHub accounts, accounting for 50% of votes, simple majority.  
 
   Voting ends:
-  - 2-3 weeks after the issue is moved to the Voting stage OR
+  - 2-3 weeks after the issue is moved to the Active stage OR
   - 3 months after the issue is opened
   
   Results are valid if at least 50% of internals has voted (including abstain).  
@@ -83,8 +92,6 @@ Community RFCs will have a significantly leaner and relaxed community RFC proces
   Crucially, the implementation details (API, actual code) of the feature at this stage should not be grounds to accept or reject a feature: more control is given to the author of the community RFC in this sense, who will effectively act just like a simple library or extension maintainer, making major design choices mostly autonomously during the intial stages of the community RFC, and according to community feedback mostly **after** the community RFC is accepted and released.  
 
 - There is no backoff period between similar RFCs: a v2 of the community RFC can be proposed a day after v1 is rejected for some reason.  
-
-This process is intentionally lean and non-specific, with non-strict and variable deadlines to allow for quicker iteration, and is heavily inspired by [Golang's lean proposal process](https://go.dev/s/proposal-process).  
 
 Please note: the intent of this leaner process is **not** to bypass the existing RFC process, but to **enhance** it, by providing precious, real-world adoption feedback from the PHP community.  
 
