@@ -56,7 +56,7 @@ This process is intentionally lean and non-specific to allow for quicker iterati
 
 Please note: the intent of this leaner process is **not** to bypass the existing RFC process, but to **enhance** it, by providing precious, real-world adoption feedback from the PHP community, which can then be provided when and if the community RFC is converted into a normal RFC.  
 
-- Community RFCs are proposed as simple GitHub issues to a separate php/php-community-rfcs repository, maintained by all current internals members.
+- Community RFCs are proposed as simple GitHub issues to a separate php/php-community-rfcs repository, maintained and moderated by all current internals members.  
   It can be a simple proposal, without a full design document.
   As discussion proceeds, a design document (which will be eventually used for the full, non-community RFC) can be provided as a pull request, committed to the same repo once the RFC is accepted.  
 
