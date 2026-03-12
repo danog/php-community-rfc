@@ -54,23 +54,18 @@ Community RFCs will have a significantly leaner and relaxed community RFC proces
 
 This process is intentionally lean and non-specific to allow for quicker iteration, and is heavily inspired by [Golang's lean proposal process](https://go.dev/s/proposal-process).  
 
+Please note: the intent of this leaner process is **not** to bypass the existing RFC process, but to **enhance** it, by providing precious, real-world adoption feedback from the PHP community, which can then be provided when and if the community RFC is converted into a normal RFC.  
+
 - Community RFCs are proposed as simple GitHub issues to a separate php/php-community-rfcs repository, maintained by all current internals members.
   It can be a simple proposal, without a full design document.
   As discussion proceeds, a design document (which will be eventually used for the full, non-community RFC) can be provided as a pull request, committed to the same repo once the RFC is accepted.  
 
-  Once a feature is accepted, both breaking and non-breaking changes to all code related to that feature can occur through pull requests to php-src without separate community RFCs, however a changelog should always be posted to the community RFC issue, by posting a new comment with the changelog and editing the first comment of the issue to point to the new comment.  
+  Once a community RFC is accepted, both breaking and non-breaking changes to all code related to that feature can occur through pull requests to php-src (`community` branch) without separate community RFCs, however a changelog should always be posted to the community RFC issue, by posting a new comment with the changelog and editing the first comment of the issue to point to the new comment.  
 
   Note: code and design-based breaking changes related to the subject of the community RFC are allowed without creating new community RFCs, only a major version bump is required, however only within the scope of the original RFC, for example:
 
   - Removing the deprecated `curl_close` function in the context of a `cleanup` feature centered around removing deprecated functions is allowed in a new major version of the `cleanup` feature.  
   - Removing the deprecated `curl_close` function in the context of an `async_http_client` feature unrelated to curl is **not** allowed even in a new major version.  
-
-  Once a feature is accepted, a design document must be committed to the repo, and kept updated with breaking/non-breaking changes: however, a fully detailed design document with full rationale, pro/counter arguments that will be turned into a full RFC is NOT required.  
-  
-  The committed design document can be a simple overview of the features, the API, and a link to the community RFC issue.
-  This is done because of the inherently mutable nature of php-community features: changes will likely be frequent, and updating rationale, examples and everything else that a full RFC requires will be mostly wasted work.
-  
-  The design document should be finalized, including full examples, major arguments from the community discussion and community feedback and adoption data only when turning it into a normal RFC.
 
 - Community RFC states:
   - Pending
@@ -92,6 +87,17 @@ This process is intentionally lean and non-specific to allow for quicker iterati
 
   Voting results are fetched using the [gather_votes.php](https://github.com/danog/php-community-rfc/blob/main/gather_votes.php) script, which can be easily run by anyone at any time to get up-to-date voting results with a breakdown of internals and community votes, and the overall outcome.  
 
+-  Once a community RFC is accepted, a design document must be committed to the repo, and kept updated with breaking/non-breaking changes: however, a fully detailed design document with full rationale, pro/counter arguments that will be turned into a full RFC is NOT required.  
+  
+  The committed design document can be a simple overview of the features, the API, and a link to the community RFC issue.
+  This is done because of the inherently mutable nature of php-community features: changes will likely be frequent, and updating rationale, examples and everything else that a full RFC requires will be mostly wasted work.
+  
+  The design document should be finalized, including full examples, major arguments from the community discussion and community feedback and adoption data only when turning it into a normal RFC.
+
+- Once a community RFC is accepted and community adoption of the newly introduced features reaches a threshold (at the discretion of who proposed and implemented the community RFC, with involvement of the community), and in any case **at least** 6 months after its inclusion into a stable tag of `php-community`, a normal RFC can be proposed for inclusion into the main language.  
+
+  The 6 months lower limit before conversion into a normal RFC is pretty much the only "hard" limit in community RFCs: with an excessively short feedback time authors may end up making RFCs without significant community adoption/feedback, which is essentially equivalent to doing RFCs with the old process.  
+
 - As always, discussion is open to everyone.
 
   The **key difference** between a community RFC discussion and a normal RFC discussion is that it should **not** be as heavily focused on whether it will be accepted or not by the larger community, the impact on frameworks, et cetera: it will be up the community to decide whether or not it will be used (including through packagist statistics).  
@@ -101,12 +107,6 @@ This process is intentionally lean and non-specific to allow for quicker iterati
   Crucially, the implementation details (API, actual code) of the feature at this stage should not be grounds to accept or reject a feature: more control is given to the author of the community RFC in this sense, who will effectively act just like a simple library or extension maintainer, making major design choices mostly autonomously during the initial stages of the community RFC, and according to community feedback mostly **after** the community RFC is accepted and released.  
 
 - There is no backoff period between similar RFCs: a v2 of the community RFC can be proposed a day after v1 is rejected for some reason.  
-
-Please note: the intent of this leaner process is **not** to bypass the existing RFC process, but to **enhance** it, by providing precious, real-world adoption feedback from the PHP community.  
-
-Once a feature is accepted into `php-community` and community adoption reaches a threshold (at the discretion of who proposed and implemented the community RFC, with involvement of the community), and in any case **at least** 6 months after its inclusion into a stable tag of `php-community`, a normal RFC can be proposed for inclusion into the main language.  
-
-The 6 months lower limit before conversion into a normal RFC is pretty much the only "hard" limit in community RFCs: with an excessively short feedback time authors may end up making RFCs without significant community adoption/feedback, which is essentially equivalent to doing RFCs with the old process.  
 
 ### The php-community release process
 
