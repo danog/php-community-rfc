@@ -102,7 +102,7 @@ Please note: the intent of this leaner process is **not** to bypass the existing
 
   Features introduced by an accepted community RFC can only be removed 6 months after it is accepted, through a separate removal community RFC.  
   
-  A feature is eligible for removal only if **both** of the following conditions are met:
+  A feature is eligible for removal only if **both** of the following conditions are met:  
 
   1. It has no active maintainer listed in the accepted community RFC design document.  
   2. Adoption is negligible, as evidenced by Packagist statistics.  
