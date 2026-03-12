@@ -99,20 +99,20 @@ Please note: the intent of this leaner process is **not** to bypass the existing
 - The community RFC design document must contain the full list of the current maintainer(s) of the features, which can be updated by the maintainers themselves, or by internals members in case of inactivity of any of the maintainers.  
 
 -  If a community RFC is accepted, then converted into a normal RFC, and then the normal RFC for some reason gets rejected, the community RFC is not automatically rejected and its features are not automatically removed from php-community.  
-
+  
   Features introduced by an accepted community RFC can only be removed 6 months after it is accepted, through a separate removal community RFC.  
   
   A feature is eligible for removal only if **both** of the following conditions are met:  
-
+  
   1. It has no active maintainer listed in the accepted community RFC design document.  
   2. Adoption is negligible, as evidenced by Packagist statistics.  
-
+  
   The burden of proof lies with the party proposing removal, not with users. When a removal community RFC is accepted, a deprecation period of at least 3 stable `php-community` releases follows, during which the feature is still shipped but marked as deprecated, giving users time to speak up, take over maintenance, or migrate away.  
-
+  
   This prevents removal of an actively-maintained, well-adopted feature through this process; equally, this lifts from php-src contributors the burden of indefinitely maintaining a dead one.  
-
+  
   The above process is inspired by Linux's own unused feature removal process.  
-
+  
 - As always, discussion is open to everyone.
 
   The **key difference** between a community RFC discussion and a normal RFC discussion is that it should **not** be as heavily focused on whether it will be accepted or not by the larger community, the impact on frameworks, et cetera: it will be up the community to decide whether or not it will be used (including through packagist statistics).  
