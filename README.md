@@ -1,5 +1,14 @@
 # php-community: a faster-moving, community-driven PHP.
 
+## Table of Contents
+
+- [Introduction](#introduction)
+  - [What problem is this RFC solving](#what-problem-is-this-rfc-solving)
+  - [The community RFC process](#the-community-rfc-process)
+  - [The php-community release process](#the-php-community-release-process)
+  - [Feature extensions](#feature-extensions)
+  - [API](#api)
+
 ## Introduction
 
 With this proposal, the entire PHP community gets immediate access to experimental features through an official `php-community` version of PHP, versioned in a rolling manner (i.e. `php-community 2026.03.01`), and available on `php.net` along normal PHP releases.  
@@ -13,13 +22,13 @@ Experimental features distributed through `php-community` can be:
 
 Experimental features are offered as special PHP *feature extensions* **built into PHP by default**.  
 
-These special *feature extensions* are **versioned** with semver and **disabled by default**, and can easily enabled with a single `PhpFeature::get($name, $version)->enable()` call (i.e. automatically invoked by the Composer autoloader).  
+These special *feature extensions* are **versioned** with semver and **disabled by default**, and can be easily enabled with a single `PhpFeature::get($name, $version)->enable()` call (i.e. automatically invoked by the Composer autoloader).  
 
 *Feature extensions* can rely or conflict with specific versions of other feature extensions.  
 
 *Feature extensions* **cannot** be enabled using php.ini, to distinguish them from normal extensions.  
 
-For the first time, **official** binaries and packages are provided for all major Linux distros on `php.net` (and the usual binary builds for Mac OS and Windows are provided as well).
+For the first time, **official** binaries and packages will be provided for all major Linux distros for `php-community` releases on `php.net` (and the usual binary builds for Mac OS and Windows will be provided as well).
 
 This makes it significantly easier to get real feedback on features from the **entire** PHP community.  
 
@@ -89,7 +98,7 @@ This process is intentionally lean and non-specific to allow for quicker iterati
 
   In other words, discussion should follow mainly the same themes of a normal RFC discussion, just much lighter, without assuming anything in regards on adoption (or non-adoption) and impact on the community.  
 
-  Crucially, the implementation details (API, actual code) of the feature at this stage should not be grounds to accept or reject a feature: more control is given to the author of the community RFC in this sense, who will effectively act just like a simple library or extension maintainer, making major design choices mostly autonomously during the intial stages of the community RFC, and according to community feedback mostly **after** the community RFC is accepted and released.  
+  Crucially, the implementation details (API, actual code) of the feature at this stage should not be grounds to accept or reject a feature: more control is given to the author of the community RFC in this sense, who will effectively act just like a simple library or extension maintainer, making major design choices mostly autonomously during the initial stages of the community RFC, and according to community feedback mostly **after** the community RFC is accepted and released.  
 
 - There is no backoff period between similar RFCs: a v2 of the community RFC can be proposed a day after v1 is rejected for some reason.  
 
@@ -99,7 +108,7 @@ Once a feature is accepted into `php-community` and community adoption reaches a
 
 The 6 months lower limit before conversion into a normal RFC is pretty much the only "hard" limit in community RFCs: with an excessively short feedback time authors may end up making RFCs without significant community adoption/feedback, which is essentially equivalent to doing RFCs with the old process.  
 
-### Release process
+### The php-community release process
 
 Versioning will be date-based, i.e. `php-community 2026.01.01`.  
 
@@ -123,7 +132,7 @@ Community releases are "handled" by the same release managers of the latest stab
 
     Human involvement is only needed in case of errors in any of the CI jobs, fixed by committing first to the `community` branch, then pushing to the `community-202X.XX.XX` branch, eventually re-creating the `php-community-202X.XX.XX` tag if the failure occurred only in the tag CI build.  
 
-### Details
+### Feature extensions
 
 Core language behavior and features can be defined by optionally enabled, but always built-in **feature extensions**.  
 
@@ -138,7 +147,7 @@ Some feature extensions (like the `performance` extension above) may be provided
 
 Feature extensions may require or conflict with specific or range-based versions of other feature extensions, like Composer packages.  
 
-A new `PhpFeature` class is offered to enable get info about available feature and enable a specific version of a given **feature extension** at runtime: once enabled, the version cannot be changed.
+A new `PhpFeature` class is offered to get info about available features and enable a specific version of a given **feature extension** at runtime: once enabled, the version cannot be changed.
 
 The main intended usecase is integration into Composer through an `ext-X` dependency (or even `feature-X`), which will be automatically enabled by the composer autoloader according to package requirements.  
   
