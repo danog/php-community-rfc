@@ -110,12 +110,12 @@ while ($url !== null && $internalsRemaining > 0) {
 			$previousVote = $trackedVotes[$trackedUsername];
 			if ($previousVote === 'no vote') {
 				$internalsRemaining--;
-			} elseif ($previousVote !== $vote) {
-				$internalsVoteCounts[$previousVote]--;
-			}
-			if ($previousVote !== $vote) {
 				$internalsVoteCounts[$vote]++;
 				$trackedVotes[$trackedUsername] = $vote;
+			} elseif ($previousVote !== $vote) {
+				throw new RuntimeException(
+					"Internals member @{$trackedUsername} has cast two different votes: {$previousVote} and {$vote}"
+				);
 			}
 			continue;
 		}
