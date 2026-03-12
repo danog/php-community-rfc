@@ -75,6 +75,15 @@ Please note: the intent of this leaner process is **not** to bypass the existing
 
   The state is specified through appropriate issue labels, that can only be edited by internals members.  
 
+  Allowed state changes:
+
+  - Pending => Active
+  - Active => Pending
+  - Active => Accepted
+  - Active => Rejected
+  - Accepted => Pending (especially relevant for removal community RFCs)
+  - Rejected => Pending 
+
 - Voting is immediately open (at the Pending stage), and occurs through:
   - Simple GitHub 👍 = Accept, 👎 = Reject reactions on the issue, open to the entire PHP community, accounting for 50% of votes, simple majority.
   - internals members through GitHub 👍 = Accept, 👎 = Reject, 👀 = Abstain reactions on the issue using their GitHub accounts, accounting for 50% of votes, simple majority.  
@@ -107,7 +116,7 @@ Please note: the intent of this leaner process is **not** to bypass the existing
    1. It has no active maintainer listed in the accepted community RFC design document.  
    2. Adoption is negligible, as evidenced by Packagist statistics.  
 
-   The burden of proof lies with the party proposing removal, not with users. When a removal community RFC is accepted, a deprecation period of at least 3 stable `php-community` releases follows, during which the feature is still shipped but marked as deprecated, giving users time to speak up, take over maintenance, or migrate away.  
+   The burden of proof lies with the party proposing removal, not with users. When a removal community RFC is accepted, a deprecation period of at least 3 stable `php-community` releases follows, during which the feature is still shipped but marked as deprecated, giving users time to speak up (which can potentially move the RFC back to Active or Pending), take over maintenance (which will automatically reject the removal RFC, even if already accepted), or migrate away.  
 
    This prevents removal of an actively-maintained, well-adopted feature through this process; equally, this lifts from php-src contributors the burden of indefinitely maintaining a dead one.  
 
