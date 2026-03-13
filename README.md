@@ -56,81 +56,101 @@ This process is intentionally lean and non-specific to allow for quicker iterati
 
 Please note: the intent of this leaner process is **not** to bypass the existing RFC process, but to **enhance** it, by providing precious, real-world adoption feedback from the PHP community, which can then be provided when and if the community RFC is converted into a normal RFC.  
 
-- Community RFCs are proposed as simple GitHub issues to a separate php/php-community-rfcs repository, maintained and moderated by all current internals members.  
-  It can be a simple proposal, without a full design document.
-  As discussion proceeds, a design document (which will be eventually used for the full, non-community RFC) can be provided as a pull request, committed to the same repo once the RFC is accepted.  
+Community RFCs are proposed as simple GitHub issues to a separate php/php-community-rfcs repository, maintained and moderated by all current internals members.  
+It can be a simple proposal, without a full design document.
+As discussion proceeds, a design document (which will be eventually used for the full, non-community RFC) can be provided as a pull request, committed to the same repo once the RFC is accepted.  
 
-  Once a community RFC is accepted, both breaking and non-breaking changes to all code related to that feature can occur through pull requests to php-src (`community` branch) without separate community RFCs, however a changelog should always be posted to the community RFC issue, by posting a new comment with the changelog and editing the first comment of the issue to point to the new comment.  
+Once a community RFC is accepted, both breaking and non-breaking changes to all code related to that feature can occur through pull requests to php-src (`community` branch) without separate community RFCs, however a changelog should always be posted to the community RFC issue, by posting a new comment with the changelog and editing the first comment of the issue to point to the new comment.  
 
-  Note: code and design-based breaking changes related to the subject of the community RFC are allowed without creating new community RFCs, only a major version bump is required, however only within the scope of the original RFC, for example:
+Note: code and design-based breaking changes related to the subject of the community RFC are allowed without creating new community RFCs, only a major version bump is required, however only within the scope of the original RFC, for example:
 
-  - Removing the deprecated `curl_close` function in the context of a `cleanup` feature centered around removing deprecated functions is allowed in a new major version of the `cleanup` feature.  
-  - Removing the deprecated `curl_close` function in the context of an `async_http_client` feature unrelated to curl is **not** allowed even in a new major version.  
+- Removing the deprecated `curl_close` function in the context of a `cleanup` feature centered around removing deprecated functions is allowed in a new major version of the `cleanup` feature.  
+- Removing the deprecated `curl_close` function in the context of an `async_http_client` feature unrelated to curl is **not** allowed even in a new major version.  
 
-- Community RFC states:
-  - Pending
-  - Active
-  - Accepted
-  - Rejected
+#### Community RFC states
 
-  The state is specified through appropriate issue labels, that can only be edited by internals members.  
+Community RFC states:
 
-  Allowed state changes:
+- Pending
+- Active
+- Accepted
+- Rejected
 
-  - Pending => Active
-  - Active => Pending
-  - Active => Accepted
-  - Active => Rejected
-  - Accepted => Pending (especially relevant for removal community RFCs)
-  - Rejected => Pending 
+The state is specified through appropriate issue labels, that can only be edited by internals members.  
 
-- Voting is immediately open (at the Pending stage), and occurs through:
-  - Simple GitHub 👍 = Accept, 👎 = Reject reactions on the issue, open to the entire PHP community, accounting for 50% of votes, simple majority.
-  - internals members through GitHub 👍 = Accept, 👎 = Reject, 👀 = Abstain reactions on the issue using their GitHub accounts, accounting for 50% of votes, simple majority.  
+Allowed state changes:
 
-  Voting ends:
-  - 2-3 weeks after the issue is moved to the Active stage OR
-  - 3 months after the issue is opened
+- Pending => Active
+- Active => Pending
+- Active => Accepted
+- Active => Rejected
+- Accepted => Pending (especially relevant for removal community RFCs)
+- Rejected => Pending 
+
+#### Voting
+
+Voting is immediately open (at the Pending stage), and occurs through:
+
+- Simple GitHub 👍 = Accept, 👎 = Reject reactions on the issue, open to the entire PHP community, accounting for 50% of votes, simple majority.
+- internals members through GitHub 👍 = Accept, 👎 = Reject, 👀 = Abstain reactions on the issue using their GitHub accounts, accounting for 50% of votes, simple majority.  
+
+Voting ends:
+
+- 2-3 weeks after the issue is moved to the Active stage OR
+- 3 months after the issue is opened
   
-  Results are valid if at least 50% of internals has voted (including abstain).  
+Results are valid if at least 50% of internals has voted (including abstain).  
 
-  Voting results are fetched using the [gather_votes.php](https://github.com/danog/php-community-rfc/blob/main/gather_votes.php) script, which can be easily run by anyone at any time to get up-to-date voting results with a breakdown of internals and community votes, and the overall outcome.  
+Voting results are fetched using the [gather_votes.php](https://github.com/danog/php-community-rfc/blob/main/gather_votes.php) script, which can be easily run by anyone at any time to get up-to-date voting results with a breakdown of internals and community votes, and the overall outcome.  
 
--  Once a community RFC is accepted, a design document must be committed to the repo, and kept updated with breaking/non-breaking changes: however, a fully detailed design document with full rationale, pro/counter arguments that will be turned into a full RFC is NOT required.  
-  The committed design document can be a simple overview of the features, the API, and a link to the community RFC issue.  
-  This is done because of the inherently mutable nature of php-community features: changes will likely be frequent, and updating rationale, examples and everything else that a full RFC requires will be mostly wasted work.  
-  The design document should be finalized, including full examples, major arguments from the community discussion and community feedback and adoption data only when turning it into a normal RFC.  
+#### Design document
 
-- Once a community RFC is accepted and community adoption of the newly introduced features reaches a threshold (at the discretion of who proposed and implemented the community RFC, with involvement of the community), and in any case **at least** 6 months after its inclusion into a stable tag of `php-community`, a normal RFC can be proposed for inclusion into the main language.  
+Once a community RFC is accepted, a design document must be committed to the repo, and kept updated with breaking/non-breaking changes: however, a fully detailed design document with full rationale, pro/counter arguments that will be turned into a full RFC is NOT required.  
 
-  The 6 months lower limit before conversion into a normal RFC is pretty much the only "hard" limit in community RFCs: with an excessively short feedback time authors may end up making RFCs without significant community adoption/feedback, which is essentially equivalent to doing RFCs with the old process.  
+The committed design document can be a simple overview of the features, the API, and a link to the community RFC issue.  
+This is done because of the inherently mutable nature of php-community features: changes will likely be frequent, and updating rationale, examples and everything else that a full RFC requires will be mostly wasted work.  
+The design document should be finalized, including full examples, major arguments from the community discussion and community feedback and adoption data only when turning it into a normal RFC.  
 
-- The community RFC design document must contain the full list of the current maintainer(s) of the features, which can be updated by the maintainers themselves, or by internals members in case of inactivity of any of the maintainers.  
+#### Conversion into normal RFCs
 
--  If a community RFC is accepted, then converted into a normal RFC, and then the normal RFC for some reason gets rejected, the community RFC is not automatically rejected and its features are not automatically removed from php-community.  
+Once a community RFC is accepted and community adoption of the newly introduced features reaches a threshold (at the discretion of who proposed and implemented the community RFC, with involvement of the community), and in any case **at least** 6 months after its inclusion into a stable tag of `php-community`, a normal RFC can be proposed for inclusion into the main language.  
 
-   Features introduced by an accepted community RFC can only be removed 6 months after it is accepted, through a separate removal community RFC.  
+The 6 months lower limit before conversion into a normal RFC is pretty much the only "hard" limit in community RFCs: with an excessively short feedback time authors may end up making RFCs without significant community adoption/feedback, which is essentially equivalent to doing RFCs with the old process.  
 
-   A feature is eligible for removal only if **both** of the following conditions are met:  
+#### Community RFC owners
 
-   1. It has no active maintainer listed in the accepted community RFC design document.  
-   2. Adoption is negligible, as evidenced by Packagist statistics.  
+The community RFC design document must contain the full list of the current maintainer(s)/owner(s) of the features, which can be updated by the owners themselves, or by internals members in case of inactivity of any of the owners.  
 
-   The burden of proof lies with the party proposing removal, not with users. When a removal community RFC is accepted, a deprecation period of at least 3 stable `php-community` releases follows, during which the feature is still shipped but marked as deprecated, giving users time to speak up (which can potentially move the RFC back to Active or Pending), take over maintenance (which will automatically reject the removal RFC, even if already accepted), or migrate away.  
+#### Removal of community RFC features
 
-   This prevents removal of an actively-maintained, well-adopted feature through this process; equally, this lifts from php-src contributors the burden of indefinitely maintaining a dead one.  
+If a community RFC is accepted, then converted into a normal RFC, and then the normal RFC for some reason gets rejected, the community RFC is not automatically rejected and its features are not automatically removed from php-community.  
 
-   The above process is inspired by Linux's own unused feature removal process.  
-  
-- As always, discussion is open to everyone.
+Features introduced by an accepted community RFC can only be removed 6 months after it is accepted, through a separate removal community RFC.  
 
-  The **key difference** between a community RFC discussion and a normal RFC discussion is that it should **not** be as heavily focused on whether it will be accepted or not by the larger community, the impact on frameworks, et cetera: it will be up the community to decide whether or not it will be used (including through packagist statistics).  
+A feature is eligible for removal only if **both** of the following conditions are met:  
 
-  In other words, discussion should follow mainly the same themes of a normal RFC discussion, just much lighter, without assuming anything in regards on adoption (or non-adoption) and impact on the community.  
+1. It has no active maintainer listed in the accepted community RFC design document.  
+2. Adoption is negligible, as evidenced by Packagist statistics.  
 
-  Crucially, the implementation details (API, actual code) of the feature at this stage should not be grounds to accept or reject a feature: more control is given to the author of the community RFC in this sense, who will effectively act just like a simple library or extension maintainer, making major design choices mostly autonomously during the initial stages of the community RFC, and according to community feedback mostly **after** the community RFC is accepted and released.  
+The burden of proof lies with the party proposing removal, not with users. When a removal community RFC is accepted, a deprecation period of at least 3 stable `php-community` releases follows, during which the feature is still shipped but marked as deprecated, giving users time to speak up (which can potentially move the RFC back to Active or Pending), take over maintenance (which will automatically reject the removal RFC, even if already accepted), or migrate away.  
 
-- There is no backoff period between similar RFCs: a v2 of the community RFC can be proposed a day after v1 is rejected for some reason.  
+This prevents removal of an actively-maintained, well-adopted feature through this process; equally, this lifts from php-src contributors the burden of indefinitely maintaining a dead one.  
+
+The above process is inspired by Linux's own unused feature removal process.  
+
+#### Discussion process
+
+As always, discussion is open to everyone.
+
+The **key difference** between a community RFC discussion and a normal RFC discussion is that it should **not** be as heavily focused on whether it will be accepted or not by the larger community, the impact on frameworks, et cetera: it will be up the community to decide whether or not it will be used (including through packagist statistics).  
+
+In other words, discussion should follow mainly the same themes of a normal RFC discussion, just much lighter, without assuming anything in regards on adoption (or non-adoption) and impact on the community.  
+
+Crucially, the implementation details (API, actual code) of the feature at this stage should not be grounds to accept or reject a feature: more control is given to the author of the community RFC in this sense, who will effectively act just like a simple library or extension maintainer, making major design choices mostly autonomously during the initial stages of the community RFC, and according to community feedback mostly **after** the community RFC is accepted and released.  
+
+#### Backoff period
+
+There is no backoff period between similar RFCs: a v2 of the community RFC can be proposed a day after v1 is rejected for some reason.  
 
 ### The php-community release process
 
