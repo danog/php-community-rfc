@@ -5,6 +5,7 @@
 - [Introduction](#introduction)
   - [What problem is this RFC solving](#what-problem-is-this-rfc-solving)
   - [The community RFC process](#the-community-rfc-process)
+    - [Community RFCs](#community-rfcs)
     - [Community RFC states](#community-rfc-states)
     - [Voting](#voting)
     - [Design document](#design-document)
@@ -63,6 +64,8 @@ Community RFCs will have a significantly leaner and relaxed community RFC proces
 This process is intentionally lean and non-specific to allow for quicker iteration, and is heavily inspired by [Golang's lean proposal process](https://go.dev/s/proposal-process).  
 
 Please note: the intent of this leaner process is **not** to bypass the existing RFC process, but to **enhance** it, by providing precious, real-world adoption feedback from the PHP community, which can then be provided when and if the community RFC is converted into a normal RFC.  
+
+#### Community RFCs
 
 Community RFCs are proposed as simple GitHub issues to a separate php/php-community-rfcs repository, maintained and moderated by all current internals members.  
 It can be a simple proposal, without a full design document.
