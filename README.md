@@ -124,9 +124,7 @@ Note, while it is possible to add some additional requirements for community vot
 
 - This allows the entire PHP community to vote, including a considerable chunk (if not in size, in importance) which does not normally use GitHub or composer for PHP development (i.e. the Wordpress community)
 - Basically any additional check (except for government ID verification, which is out of the question) can be bypassed in some way anyway: however, voting occurs through public GitHub reactions, which does allow for maximum transparency, as all community voters can be fetched using the GitHub API, making optional cheating detection in case of suspicion much easier.  
-- Most importantly: internals has effective veto rights by not voting on the proposal, keeping it under the 50% quorum.  
-
-  This means that even a (potentially gamed) 99% approval rate from the community can be voted by internals by simply not voting.
+- Most importantly: internals has effective veto rights by not voting on the proposal, keeping it under the 50% quorum. <br> This means that even a (potentially gamed) 99% approval rate from the community can be voted by internals by simply not voting.
 
 GitHub was explicitly chosen both as a replacement to the current voting platform, the existing wiki and mailing lists to greatly improve acessibility and agility.  
 
@@ -193,17 +191,19 @@ Versioning will be date-based, i.e. `php-community 2026.01.01`.
 
 `php-community` will live on a new `community` branch of `php-src`.  
 
-Community releases are "handled" by the same release managers of the latest stable PHP release, however the release process will be significantly automated, compared to the current manual release process:
+Community releases are "handled" by the same release managers of the latest stable PHP release, however the release process will be significantly automated, compared to the current manual release process: binary, packaged and source releases for both stable and nightly will be reproducible, auto-built and published to `php.net` by Github Actions on php-src, without human involvement (which also improves security).  
 
-- Binary, packaged and source releases for both stable and nightly will be reproducible, auto-built and published to `php.net` by Github Actions on php-src, without human involvement (which also improves security).  
-- Release managers only need to:
-  - Branch off `community-202X.XX.XX` from `community`
-  - Wait for the CI status of the new branch to become green
-  - Create a new `php-community-202X.XX.XX` tag
-  - Wait for the CI status of the tag to become green, which will automatically build and stage all binaries and packages for all platforms.  
-    The final deployment step, deploying all staged binaries and packages and sending off an email to the mailing lists will also be automatic, based on the statuses of all builds for all platforms.  
+Release managers only need to:
 
-    Human involvement is only needed in case of errors in any of the CI jobs, fixed by committing first to the `community` branch, then pushing to the `community-202X.XX.XX` branch, eventually re-creating the `php-community-202X.XX.XX` tag if the failure occurred only in the tag CI build.  
+- Branch off `community-202X.XX.XX` from `community`
+- Wait for the CI status of the new branch to become green
+- Create a new `php-community-202X.XX.XX` tag
+- Wait for the CI status of the tag to become green, which will automatically build and stage all binaries and packages for all platforms.  
+
+
+The final deployment step, deploying all staged binaries and packages and sending off an email to the mailing lists will also be automatic, based on the statuses of all builds for all platforms.  
+
+Human involvement is only needed in case of errors in any of the CI jobs, fixed by committing first to the `community` branch, then pushing to the `community-202X.XX.XX` branch, eventually re-creating the `php-community-202X.XX.XX` tag if the failure occurred only in the tag CI build.  
 
 ### Feature extensions
 
@@ -230,7 +230,7 @@ All features merged into php-community will be fully documented on php.net, just
 
 Feature extensions are enabled using a simple [method call &raquo;](#api).  
 
-*Feature extensions* **cannot** be enabled using php.ini, to allow enabling features on webhosts: however, to allow for proper sandboxing and thus webhost adoption, a new universal **sandboxing level** configuration key is added to `php.ini`, effectively offering the same protection offered by `disable_functions` et al, for all feature extensions, without the need to search which specific functions to disable.  
+*Feature extensions* **cannot** be enabled using php.ini, to allow enabling features on webhosts: however, to allow for proper sandboxing and thus webhost adoption, a new universal **sandboxing level** configuration key is added to `php.ini`, effectively offering the same protection offered by `disable_functions` et al, for all feature extensions, without the need to search which specific functions and features to disable.  
 
 The `sandboxing_level` `php.ini` is a comma-separated list of sandbox keys, which may be combined as needed.  
 
