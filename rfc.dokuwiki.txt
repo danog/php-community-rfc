@@ -183,6 +183,8 @@ In other words, discussion should follow mainly the same themes of a normal RFC 
 
 Crucially, the implementation details (API, actual code) of the feature at this stage should not be grounds to accept or reject a feature: more control is given to the author of the community RFC in this sense, who will effectively act just like a simple library or extension maintainer, making major design choices mostly autonomously during the initial stages of the community RFC, and according to community feedback mostly **after** the community RFC is accepted and released.
 
+This also greatly reduces load on internals members, who only have to review the overall proposal, without focusing too much on the details.
+
 === Backoff period ===
 
 There is no backoff period between similar RFCs: a v2 of the community RFC can be proposed a day after v1 is rejected for some reason.
