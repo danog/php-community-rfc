@@ -64,7 +64,7 @@ $header = <<<HEADER
   * Version: 1.0
   * Date: 2026-03-14
   * Author: Daniil Gentili, daniil.gentili@gmail.com
-  * Status: Draft
+  * Status: Under Discussion
   * Repo of the RFC itself: https://github.com/danog/php-community-rfc
 
 
