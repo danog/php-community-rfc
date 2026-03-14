@@ -20,7 +20,7 @@
 
 ## Introduction
 
-With this proposal, the entire PHP community gets immediate access to experimental features through an official `php-community` version of PHP, versioned in a rolling manner (i.e. `php-community 2026.03.01`), and available on `php.net` along normal PHP releases.  
+With this proposal, the entire PHP community gets immediate access to experimental features through an official `php-community` version of PHP, versioned in a rolling manner (i.e. `php-community 2026.03.01`), and available on `php.net` alongside normal PHP releases.  
 
 Experimental features distributed through `php-community` can be:
 
@@ -170,7 +170,7 @@ As always, discussion is open to everyone.
 
 The **key difference** between a community RFC discussion and a normal RFC discussion is that it should **not** be as heavily focused on whether it will be accepted or not by the larger community, the impact on frameworks, et cetera: it will be up the community to decide whether or not it will be used (including through packagist statistics).  
 
-In other words, discussion should follow mainly the same themes of a normal RFC discussion, just much lighter, without assuming anything in regards on adoption (or non-adoption) and impact on the community.  
+In other words, discussion should follow mainly the same themes of a normal RFC discussion, just much lighter, without assuming anything regarding adoption (or non-adoption) and impact on the community.  
 
 Crucially, the implementation details (API, actual code) of the feature at this stage should not be grounds to accept or reject a feature: more control is given to the author of the community RFC in this sense, who will effectively act just like a simple library or extension maintainer, making major design choices mostly autonomously during the initial stages of the community RFC, and according to community feedback mostly **after** the community RFC is accepted and released.  
 
@@ -192,7 +192,7 @@ Versioning will be date-based, i.e. `php-community 2026.01.01`.
 
 `php-community` will live on a new `community` branch of `php-src`.  
 
-Community releases are "handled" by the same release managers of the latest stable PHP release, however the release process will be significantly automated, compared to the current manual release process: binary, packaged and source releases for both stable and nightly will be reproducible, auto-built and published to `php.net` by Github Actions on php-src, without human involvement (which also improves security).  
+Community releases are "handled" by the same release managers of the latest stable PHP release, however the release process will be significantly automated, compared to the current manual release process: binary, packaged and source releases for both stable and nightly will be reproducible, auto-built and published to `php.net` by GitHub Actions on php-src, without human involvement (which also improves security).  
 
 Release managers only need to:
 
@@ -223,7 +223,7 @@ Feature extensions may require or conflict with specific or range-based versions
 
 A new `PhpFeature` class is offered to get info about available features and enable a specific version of a given **feature extension** at runtime: once enabled, the version cannot be changed.
 
-The main intended usecase is integration into Composer through an `ext-X` dependency (or even `feature-X`), which will be automatically enabled by the composer autoloader according to package requirements.  
+The main intended use case is integration into Composer through an `ext-X` dependency (or even `feature-X`), which will be automatically enabled by the composer autoloader according to package requirements.  
   
 Apart from core language behavior, feature extensions may just be normal, community extensions being considered for inclusion into future PHP versions.
 
@@ -316,7 +316,7 @@ final class PhpFeature {
      * Returns false if any of the currently loaded
      * feature extensions conflict with the current feature extension.
      * 
-     * Returns false if the current feature cannot be enabled at runtime.  
+     * Returns false if the current feature can only be enabled at compile-time.
      */
     public function canEnable(): bool;
     /**
@@ -336,7 +336,7 @@ final class PhpFeature {
     /**
      * Enables the feature.
      * 
-     * @throws RuntimeException If the feature cannot be enabled due to conflicts of already loaded extensions with either the current feature or of features on which this feature depends, or if it can only be enabled at runtime.
+     * @throws RuntimeException If the feature cannot be enabled due to conflicts of already loaded extensions with either the current feature or of features on which this feature depends, or if it can only be enabled at compile-time.
      */
     public function enable(): void;
 
@@ -368,7 +368,7 @@ Standalone, non-composer users can enable features, and check for conflicts with
 
 More complex `requires(self $other)`, `conflicts(self $other)`, `getDependencies(): list<self>`, etc. methods are omitted for simplicity, delegating dependency resolution through SAT solving to Composer.  
 
-Note: some features which might be hard to enable at runtime, like JIT, though this specific example is debatable, ideally all features can and should be designed to be enablable at runtime, this is already the case for features like `strict_types=1` at a file level, i.e. JIT may be harder but is not impossible through appropriate execution state isolation.  
+Note: some features which might be hard to enable at runtime, like JIT, though this specific example is debatable, ideally all features can and should be designed to be enableable at runtime, this is already the case for features like `strict_types=1` at a file level, i.e. JIT may be harder but is not impossible through appropriate execution state isolation.  
 
 For features which are truly too hard or too expensive to enable at runtime, a separate, compile-time way to enable them is provided through `#![feature()]`, only applied for **entry points**.  
 
