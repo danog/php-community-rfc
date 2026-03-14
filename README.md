@@ -367,7 +367,7 @@ Standalone, non-composer users can enable features, and check for conflicts with
 
 More complex `requires(self $other)`, `conflicts(self $other)`, `getDependencies(): list<self>`, etc. methods are omitted for simplicity, delegating dependency resolution through SAT solving to Composer.  
 
-Note: some features which might be hard to enable at runtime, like JIT, though this specific example is debatable, ideally all features can and should be designed to be enablable at runtime, this is already the case for features like `strict_types=1` at a file level, JIT may be harder but is not impossible through appropriate execution state isolation.  
+Note: some features which might be hard to enable at runtime, like JIT, though this specific example is debatable, ideally all features can and should be designed to be enablable at runtime, this is already the case for features like `strict_types=1` at a file level, i.e. JIT may be harder but is not impossible through appropriate execution state isolation.  
 
 For features which are truly too hard or too expensive to enable at runtime, a separate, compile-time way to enable them is provided through `#![feature()]`, only applied for **entry points**.  
 
