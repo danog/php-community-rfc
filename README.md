@@ -67,7 +67,7 @@ Please note: the intent of this leaner process is **not** to bypass the existing
 
 Also note that while inspired by the leanness of Go's process, the intent of this proposal is not to make the community RFC process "more like them": as shown in the past, the RFC processes of modern languages like Go and Rust also have had their own failures.  
 
-This proposal tries to take the best of all worlds, aiming to create a process which will truly be better than the status quo of all modern programming languages, including Go, PHP, Rust, etc.  
+This proposal tries to take the best of all worlds, aiming to create a **lean** process which will truly be better than the status quo of all modern programming languages, including Go, PHP, Rust, etc.  
 
 #### Community RFCs
 
