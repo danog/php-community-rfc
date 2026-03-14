@@ -65,6 +65,10 @@ This process is intentionally lean and non-specific to allow for quicker iterati
 
 Please note: the intent of this leaner process is **not** to bypass the existing RFC process, but to **enhance** it, by providing precious, real-world adoption feedback from the PHP community, which can then be provided when and if the community RFC is converted into a normal RFC.  
 
+Also note that while inspired by the leanness of Go's process, the intent of this proposal is not to make the community RFC process "more like them": as shown in the past, the RFC processes of modern languages like Go and Rust also have had their own failures.  
+
+This proposal tries to take the best of all worlds, aiming to create a process which will truly be better than the status quo of all modern programming languages, including Go, PHP, Rust, etc.  
+
 #### Community RFCs
 
 Community RFCs are proposed as simple GitHub issues to a separate php/php-community-rfcs repository, maintained and moderated by all current internals members.  
