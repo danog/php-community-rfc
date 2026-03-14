@@ -51,7 +51,7 @@ The RFC discussion process often offers *some* insight on the possible impact of
 
 Distributing major (and minor) language changes in an easily accessible manner, using an official PHP distro, allows:
 
-- Immediate, large-scale community adoption if there is real interest in the feature.<br>Even deprecations can be interesting to users if they are offered a `performance` extension that disables some deprecated language features in exchange for significantly improved performance, and projects can simply `composer require ext-performance` to immediately speed up their project.  
+- Immediate, large-scale community adoption if there is real interest in the feature. <br> Even deprecations can be interesting to users if they are offered a `performance` extension that disables some deprecated language features in exchange for significantly improved performance, and projects can simply `composer require ext-performance` to immediately speed up their project.  
 - RFC authors and internals members get real-world feedback, from real users: extensions like Swoole have proven this feedback and adoption model works on a small scale, `php-community` brings it to the entire PHP community.  
 - Quick iteration on features, allowing breaking changes across minor php-community releases thanks to semantic versioning of the features themselves.
   Multiple versions of the same feature may be offered at the same time in a single `php-community` release, but only one can be enabled at runtime, to further reduce the impact of breaking changes.    
