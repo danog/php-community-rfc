@@ -123,9 +123,9 @@ Note, while it is possible to add some additional requirements for community vot
 
 - This allows the entire PHP community to vote, including a considerable chunk (if not in size, in importance) which does not normally use GitHub or composer for PHP development (i.e. the Wordpress community)
 - Basically any additional check (except for government ID verification, which is out of the question) can be bypassed in some way anyway: however, voting occurs through public GitHub reactions, which does allow for maximum transparency, as all community voters can be fetched using the GitHub API, making optional cheating detection in case of suspicion much easier.  
-- Most importantly: internals has effective veto rights by not voting on the proposal, keeping it under the 50% quorum. <br> This means that even a (potentially gamed) 99% approval rate from the community can be voted by internals by simply not voting.
+- Most importantly: internals has effective veto rights by not voting on the proposal, keeping it under the 50% quorum. <br> This means that even a (potentially gamed) 99% approval rate from the community can be vetoed by internals by simply not voting.
 
-GitHub was explicitly chosen both as a replacement to the current voting platform, the existing wiki and mailing lists to greatly improve acessibility and agility.  
+GitHub was explicitly chosen as a replacement to the current voting platform, the existing wiki and mailing lists to greatly improve accessibility and agility.  
 
 RFC processes of modern languages like Rust and Go use GitHub for the RFC process: however, the rationale behind choosing GitHub for community RFCs wasn't "to be more like them", but genuinely because it's just a great platform in terms of UX, userbase size and ease of access and use, which is also why it is used by other languages.  
 
@@ -300,7 +300,7 @@ final class PhpFeature {
     public static function has(string $feature, ?string $version = null): bool;
 
     /**
-     * Fetches a feature extension by its name and its exact or constrainted version.  
+     * Fetches a feature extension by its name and its exact or constrained version.  
      * 
      * I.e. Feature::get("performance", "^2")->enable()
      * 
@@ -320,7 +320,7 @@ final class PhpFeature {
      */
     public function canEnable(): bool;
     /**
-     * Checks if the feature can be enabled at runtime, or only at compiletime with a #![feature()]. 
+     * Checks if the feature can be enabled at runtime, or only at compile-time with a #![feature()]. 
      * 
      * Returns true if the current feature can be enabled at runtime.  
      * 
