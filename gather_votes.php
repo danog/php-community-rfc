@@ -214,8 +214,8 @@ if ($availableWeight === 0.0) {
 
 	$notes = [];
 	if (!$quorumMet) {
-		$notes[] = 'internals quorum not met, automatic REJECT regardless of outcome';
-        $result = 'REJECT';
+		$notes[] = 'internals quorum not met, automatic VETO regardless of outcome';
+        $result = 'VETOED';
 	}
     if ($internalsYesRate === null && $communityYesRate === null) {
         $notes[] = 'no votes from either side';

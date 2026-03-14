@@ -35,7 +35,7 @@ These special *feature extensions* are **versioned** with semver and **disabled 
 
 *Feature extensions* can rely or conflict with specific versions of other feature extensions.  
 
-*Feature extensions* **cannot** be enabled using php.ini, to distinguish them from normal extensions.  
+*Feature extensions* **cannot** be enabled using php.ini, to allow enabling features on webhosts: however, to allow for proper sandboxing and thus webhost adoption, a new universal **sandboxing level** configuration key is added to `php.ini`, effectively offering the same protection offered by `disable_functions` et al, for all feature extensions, without the need to search which specific functions to disable.  
 
 For the first time, **official** binaries and packages will be provided for all major Linux distros for `php-community` releases on `php.net` (and the usual binary builds for Mac OS and Windows will be provided as well).
 
@@ -112,7 +112,17 @@ Voting ends:
   
 Results are valid if at least 50% of internals has voted (including abstain).  
 
+A tie is equivalent to a rejection, though it should be exceedingly rare given the larger number of voters on the community side, leading at worst to a very long decimal percentage (i.e. `49.999999999%`), rather than a full tie.  
+
 Voting results are fetched using the [gather_votes.php](https://github.com/danog/php-community-rfc/blob/main/gather_votes.php) script, which can be easily run by anyone at any time to get up-to-date voting results with a breakdown of internals and community votes, and the overall outcome.  
+
+Note, while it is possible to add some additional requirements for community votes, like minimum age of GitHub accounts, contribution history, packagist activity, etc, they are explicitly absent, for the following reasons:
+
+- This allows the entire PHP community to vote, including a considerable chunk which does not normally use GitHub or composer for PHP development (i.e. the Wordpress community)
+- Basically any additional check (except for government ID verification, which is out of the question) can be bypassed in some way anyway: however, voting occurs through public GitHub reactions, which allows for maximum transparency, as all community voters can be fetched using the GitHub API, making optional cheating detection in case of suspicion much easier.  
+- Most importantly: internals has effective veto rights by not voting on the proposal, keeping it under the 50% quorum.  
+
+  This means that even a (potentially gamed) 99% approval rate from the community can be voted by internals by simply not voting.
 
 #### Design document
 
@@ -210,6 +220,18 @@ Apart from core language behavior, feature extensions may just be normal, commun
 
 All features merged into php-community will be fully documented on php.net, just as if they were normal language features.
 
+Feature extensions are enabled using a simple [method call &raquo;](#api).  
+
+*Feature extensions* **cannot** be enabled using php.ini, to allow enabling features on webhosts: however, to allow for proper sandboxing and thus webhost adoption, a new universal **sandboxing level** configuration key is added to `php.ini`, effectively offering the same protection offered by `disable_functions` et al, for all feature extensions, without the need to search which specific functions to disable.  
+
+The `sandboxing_level` `php.ini` is a comma-separated list of sandbox keys, which may be combined as needed.  
+
+Sandbox keys affect all functionality offered by feature extensions, as well as functionality offered by PHP itself.  
+
+The following sandbox keys are proposed:
+
+- `exec`: Disables all functionality related to process execution (`exec`, `shell_exec`, and all equivalent functionality offered by feature extensions)
+- 
 
 ### API
 
@@ -278,8 +300,20 @@ final class PhpFeature {
      * 
      * Returns false if any of the currently loaded
      * feature extensions conflict with the current feature extension.
+     * 
+     * Returns false if the current feature cannot be enabled at runtime.  
      */
     public function canEnable(): bool;
+    /**
+     * Checks if the feature can be enabled at runtime, or only at compiletime with a declare(). 
+     * 
+     * Returns true if the current feature can be enabled at runtime.  
+     * 
+     * Returns false if the current feature can only be enabled with a declare().
+     * 
+     * Unlike canEnable, does not check for conflicts with currently loaded features.  
+     */
+    public function canEnableAtRuntime(): bool;
     /**
      * Checks if the feature is already enabled.
      */
@@ -287,7 +321,7 @@ final class PhpFeature {
     /**
      * Enables the feature.
      * 
-     * @throws RuntimeException If the feature cannot be enabled due to conflicts of already loaded extensions with either the current feature or of features on which this feature depends.
+     * @throws RuntimeException If the feature cannot be enabled due to conflicts of already loaded extensions with either the current feature or of features on which this feature depends, or if it can only be enabled at runtime.
      */
     public function enable(): void;
 
@@ -318,3 +352,16 @@ The API is designed to be easily integrated into Composer, but also used standal
 Standalone, non-composer users can enable features, and check for conflicts with currently loaded features before enabling a feature.  
 
 More complex `requires(self $other)`, `conflicts(self $other)`, `getDependencies(): list<self>`, etc. methods are omitted for simplicity, delegating dependency resolution through SAT solving to Composer.  
+
+Note: some features which might be hard to enable at runtime, like JIT, though this specific example is debatable, ideally all features can and should be designed to be enablable at runtime, this is already the case for features like `strict_types=1` at a file level, JIT may be harder but is not impossible through appropriate execution state isolation.  
+
+For features which are truly too hard to enable at runtime, a separate, compile-time way to enable them is provided through `declare`, only applied for **entry points**:
+
+```
+declare(enable_features = [
+    "feature_1" => "^1",
+    "feature_2" => "^0.1",
+]);
+```
+
+The above declaration in `index.php`, or any other entry point, will enable the listed features (if present in the current release, and unless conflicts between the specified features arise): the enablement state will be reflected in the runtime `PhpFeature` API.  
