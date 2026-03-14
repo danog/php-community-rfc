@@ -146,17 +146,17 @@ $communityUp = max(0, $totalUp - $internalsVoteCounts['👍']);
 $communityDown = max(0, $totalDown - $internalsVoteCounts['👎']);
 
 // Abstain counts toward participation/quorum but not toward the yes/no ratio.
-$internalsParticipated = $internalsVoteCounts['👍'] + $internalsVoteCounts['👎'] + $internalsVoteCounts['👀'];
 $internalsTotal = $internalsVoteCounts['👍'] + $internalsVoteCounts['👎'];
 $communityTotal = $communityUp + $communityDown;
 
+$internalsParticipated = $internalsVoteCounts['👍'] + $internalsVoteCounts['👎'] + $internalsVoteCounts['👀'];
 $internalsNoVote = count(INTERNALS_GH_USERNAMES) - $internalsParticipated;
 
 if (count(INTERNALS_GH_USERNAMES) === 0) {
     $quorumMet = false;
 } else {
-    // Quorum is met if at least 50% of tracked internals have participated (voted yes/no/abstain).
-    $quorumMet = ($internalsParticipated / count(INTERNALS_GH_USERNAMES)) >= 0.5;
+    // Quorum is met if at least 50% of tracked internals have participated (voted yes/no).
+    $quorumMet = ($internalsTotal / count(INTERNALS_GH_USERNAMES)) >= 0.5;
 }
 
 function pct(int $part, int $total): string {
@@ -178,10 +178,10 @@ echo sprintf("  👍 %d/%d (%s) / 👎 %d/%d (%s) / 👀 %d / Did not vote: %d\n
 	$internalsNoVote,
 );
 
-echo sprintf("  Quorum (≥50%% of internals participated): %s (%s, %d/%d)\n",
+echo sprintf("  Quorum (≥50%% of internals participated with yes/no votes): %s (%s, %d/%d)\n",
 	$quorumMet ? 'YES' : 'NO',
-    pct($internalsParticipated, count(INTERNALS_GH_USERNAMES)),
-	$internalsParticipated,
+    pct($internalsTotal, count(INTERNALS_GH_USERNAMES)),
+	$internalsTotal,
 	count(INTERNALS_GH_USERNAMES),
 );
 

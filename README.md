@@ -110,7 +110,7 @@ Voting ends:
 - 2-3 weeks after the issue is moved to the Active stage OR
 - 3 months after the issue is opened
   
-Results are valid if at least 50% of internals has voted (including abstain).  
+Results are valid if at least 50% of internals has voted with either Accept or Reject.  
 
 A tie is equivalent to a rejection, though it should be exceedingly rare given the larger number of voters on the community side, leading at worst to a very long decimal percentage (i.e. `49.999999999%`), rather than a full tie.  
 
@@ -118,11 +118,15 @@ Voting results are fetched using the [gather_votes.php](https://github.com/danog
 
 Note, while it is possible to add some additional requirements for community votes, like minimum age of GitHub accounts, contribution history, packagist activity, etc, they are explicitly absent, for the following reasons:
 
-- This allows the entire PHP community to vote, including a considerable chunk which does not normally use GitHub or composer for PHP development (i.e. the Wordpress community)
-- Basically any additional check (except for government ID verification, which is out of the question) can be bypassed in some way anyway: however, voting occurs through public GitHub reactions, which allows for maximum transparency, as all community voters can be fetched using the GitHub API, making optional cheating detection in case of suspicion much easier.  
+- This allows the entire PHP community to vote, including a considerable chunk (if not in size, in importance) which does not normally use GitHub or composer for PHP development (i.e. the Wordpress community)
+- Basically any additional check (except for government ID verification, which is out of the question) can be bypassed in some way anyway: however, voting occurs through public GitHub reactions, which does allow for maximum transparency, as all community voters can be fetched using the GitHub API, making optional cheating detection in case of suspicion much easier.  
 - Most importantly: internals has effective veto rights by not voting on the proposal, keeping it under the 50% quorum.  
 
   This means that even a (potentially gamed) 99% approval rate from the community can be voted by internals by simply not voting.
+
+GitHub was explicitly chosen both as a replacement to the current voting platform, the existing wiki and mailing lists to greatly improve acessibility and agility.  
+
+RFC processes of modern languages like Rust and Go use GitHub for the RFC process: the rationale behind choosing GitHub for community RFCs wasn't "to be more like them", but genuinely because it's just a great platform in terms of UX, userbase size and ease of access and use.  
 
 #### Design document
 
