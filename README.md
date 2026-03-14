@@ -156,8 +156,8 @@ Features introduced by an accepted community RFC can only be removed 6 months af
 
 A feature is eligible for removal only if **both** of the following conditions are met:  
 
-1. It has no active maintainer listed in the accepted community RFC design document.  
-2. Adoption is negligible, as evidenced by Packagist statistics.  
+- It has no active maintainer listed in the accepted community RFC design document.  
+- Adoption is negligible, as evidenced by Packagist statistics.  
 
 The burden of proof lies with the party proposing removal, not with users. When a removal community RFC is accepted, a deprecation period of at least 3 stable `php-community` releases follows, during which the feature is still shipped but marked as deprecated, giving users time to speak up (which can potentially move the RFC back to Active or Pending), take over maintenance (which will automatically reject the removal RFC, even if already accepted), or migrate away.  
 
