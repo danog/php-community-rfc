@@ -5,23 +5,22 @@
   * Status: Draft
   * Repo of the RFC itself: https://github.com/danog/php-community-rfc
 
-
 ===== Table of Contents =====
 
   * [[#introduction|Introduction]]
-    * [[#what-problem-is-this-rfc-solving|What problem is this RFC solving]]
-    * [[#the-community-rfc-process|The community RFC process]]
-      * [[#community-rfcs|Community RFCs]]
-      * [[#community-rfc-states|Community RFC states]]
+    * [[#what_problem_is_this_rfc_solving|What problem is this RFC solving]]
+    * [[#the_community_rfc_process|The community RFC process]]
+      * [[#community_rfcs|Community RFCs]]
+      * [[#community_rfc_states|Community RFC states]]
       * [[#voting|Voting]]
-      * [[#design-document|Design document]]
-      * [[#conversion-into-normal-rfcs|Conversion into normal RFCs]]
-      * [[#community-rfc-owners|Community RFC owners]]
-      * [[#removal-of-community-rfc-features|Removal of community RFC features]]
-      * [[#discussion-process|Discussion process]]
-      * [[#backoff-period|Backoff period]]
-    * [[#the-php-community-release-process|The php-community release process]]
-    * [[#feature-extensions|Feature extensions]]
+      * [[#design_document|Design document]]
+      * [[#conversion_into_normal_rfcs|Conversion into normal RFCs]]
+      * [[#community_rfc_owners|Community RFC owners]]
+      * [[#removal_of_community_rfc_features|Removal of community RFC features]]
+      * [[#discussion_process|Discussion process]]
+      * [[#backoff_period|Backoff period]]
+    * [[#the_php_community_release_process|The php-community release process]]
+    * [[#feature_extensions|Feature extensions]]
     * [[#api|API]]
 
 ===== Introduction =====
