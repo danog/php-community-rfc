@@ -1,0 +1,397 @@
+====== PHP RFC: php-community: a faster-moving, community-driven PHP. ======
+  * Version: 1.0
+  * Date: 2026-03-14
+  * Author: Daniil Gentili, daniil.gentili@gmail.com
+  * Status: Draft
+  * Repo of the RFC itself: https://github.com/danog/php-community-rfc
+
+
+===== Table of Contents =====
+
+  * [[#introduction|Introduction]]
+    * [[#what-problem-is-this-rfc-solving|What problem is this RFC solving]]
+    * [[#the-community-rfc-process|The community RFC process]]
+      * [[#community-rfcs|Community RFCs]]
+      * [[#community-rfc-states|Community RFC states]]
+      * [[#voting|Voting]]
+      * [[#design-document|Design document]]
+      * [[#conversion-into-normal-rfcs|Conversion into normal RFCs]]
+      * [[#community-rfc-owners|Community RFC owners]]
+      * [[#removal-of-community-rfc-features|Removal of community RFC features]]
+      * [[#discussion-process|Discussion process]]
+      * [[#backoff-period|Backoff period]]
+    * [[#the-php-community-release-process|The php-community release process]]
+    * [[#feature-extensions|Feature extensions]]
+    * [[#api|API]]
+
+===== Introduction =====
+
+With this proposal, the entire PHP community gets immediate access to experimental features through an official ''%%php-community%%'' version of PHP, versioned in a rolling manner (i.e. ''%%php-community 2026.03.01%%''), and available on ''%%php.net%%'' along normal PHP releases.
+
+Experimental features distributed through ''%%php-community%%'' can be:
+
+  * Major new language features like True Async
+  * New stdlib functions, classes
+  * Deprecations for a more performant PHP
+  * Experimental optimizers (i.e. JIT v3)
+
+Experimental features are offered as special PHP //feature extensions// **built into PHP by default**.
+
+These special //feature extensions// are **versioned** with semver and **disabled by default**, and can be easily enabled with a single ''%%PhpFeature::get($name, $version)->enable()%%'' call (i.e. automatically invoked by the Composer autoloader).
+
+//Feature extensions// can rely or conflict with specific versions of other feature extensions.
+
+//Feature extensions// **cannot** be enabled using php.ini, to allow enabling features on webhosts: however, to allow for proper sandboxing and thus webhost adoption, a new universal **sandboxing level** configuration key is added to ''%%php.ini%%'', effectively offering the same protection offered by ''%%disable_functions%%'' et al, for all feature extensions, without the need to search which specific functions to disable.
+
+For the first time, **official** binaries and packages will be provided for all major Linux distros for ''%%php-community%%'' releases on ''%%php.net%%'' (and the usual binary builds for Mac OS and Windows will be provided as well).
+
+This makes it significantly easier to get real feedback on features from the **entire** PHP community.
+
+The main objective of this RFC is to allow the community to “preview” future language changes in an easily accessible manner: while there have been improvements lately with PIE, experimental language features distributed using normal extensions are still **not** easily accessible to the entire PHP community; every extra installation step is a barrier to entry, and often simply cannot be installed at all in the most popular PHP execution environment: **shared hosts**.
+
+==== What problem is this RFC solving ====
+
+The main problem this RFC addresses: often, proposals for important language features get either rejected, or forgotten about due to (often entirely reasonable!) doubts and uncertainty about adoption and impact on the PHP community as a whole.
+
+The RFC discussion process often offers //some// insight on the possible impact of a feature on the community as a whole, but often these are just **assumptions** not based on real data.
+
+Distributing major (and minor) language changes in an easily accessible manner, using an official PHP distro, allows:
+
+  * Immediate, large-scale community adoption if there is real interest in the feature.\\
+Even deprecations can be interesting to users if they are offered a ''%%performance%%'' extension that disables some deprecated language features in exchange for significantly improved performance, and projects can simply ''%%composer require ext-performance%%'' to immediately speed up their project.\\
+
+  * RFC authors and internals members get real-world feedback, from real users: extensions like Swoole have proven this feedback and adoption model works on a small scale, ''%%php-community%%'' brings it to the entire PHP community.\\
+
+  * Quick iteration on features, allowing breaking changes across minor php-community releases thanks to semantic versioning of the features themselves. Multiple versions of the same feature may be offered at the same time in a single ''%%php-community%%'' release, but only one can be enabled at runtime, to further reduce the impact of breaking changes.
+
+==== The community RFC process ====
+
+Community RFCs will have a significantly leaner and relaxed community RFC process, designed for both speed and quality.
+
+This process is intentionally lean and non-specific to allow for quicker iteration, and is heavily inspired by [[https://go.dev/s/proposal-process|Golang’s lean proposal process]].
+
+Please note: the intent of this leaner process is **not** to bypass the existing RFC process, but to **enhance** it, by providing precious, real-world adoption feedback from the PHP community, which can then be provided when and if the community RFC is converted into a normal RFC.
+
+Also note that while inspired by the leanness of Go’s process, the intent of this proposal is not to make the community RFC process “more like them”: as shown in the past, the RFC processes of modern languages like Go and Rust also have had their own failures.
+
+This proposal tries to take the best of all worlds, aiming to create a **lean** process which will truly be better than the status quo of all modern programming languages, including Go, PHP, Rust, etc.
+
+=== Community RFCs ===
+
+Community RFCs are proposed as simple GitHub issues to a separate php/php-community-rfcs repository, maintained and moderated by all current internals members.\\
+It can be a simple proposal, without a full design document. As discussion proceeds, a design document (which will be eventually used for the full, non-community RFC) can be provided as a pull request, committed to the same repo once the RFC is accepted.
+
+Once a community RFC is accepted, both breaking and non-breaking changes to all code related to that feature can occur through pull requests to php-src (''%%community%%'' branch) without separate community RFCs, however a changelog should always be posted to the community RFC issue, by posting a new comment with the changelog and editing the first comment of the issue to point to the new comment.
+
+Note: code and design-based breaking changes related to the subject of the community RFC are allowed without creating new community RFCs, only a major version bump is required, however only within the scope of the original RFC, for example:
+
+  * Removing the deprecated ''%%curl_close%%'' function in the context of a ''%%cleanup%%'' feature centered around removing deprecated functions is allowed in a new major version of the ''%%cleanup%%'' feature.\\
+
+  * Removing the deprecated ''%%curl_close%%'' function in the context of an ''%%async_http_client%%'' feature unrelated to curl is **not** allowed even in a new major version.
+
+=== Community RFC states ===
+
+Community RFC states:
+
+  * Pending
+  * Active
+  * Accepted
+  * Rejected
+
+The state is specified through appropriate issue labels, that can only be edited by internals members.
+
+Allowed state changes:
+
+  * Pending => Active
+  * Active => Pending
+  * Active => Accepted
+  * Active => Rejected
+  * Accepted => Pending (especially relevant for removal community RFCs)
+  * Rejected => Pending
+
+=== Voting ===
+
+Voting is immediately open (at the Pending stage), and occurs through:
+
+  * Simple GitHub 👍 = Accept, 👎 = Reject reactions on the issue, open to the entire PHP community, accounting for 50% of votes, simple majority.
+  * internals members through GitHub 👍 = Accept, 👎 = Reject, 👀 = Abstain reactions on the issue using their GitHub accounts, accounting for 50% of votes, simple majority.
+
+Voting ends:
+
+  * 2-3 weeks after the issue is moved to the Active stage OR
+  * 3 months after the issue is opened
+
+Results are valid if at least 50% of internals has voted with either Accept or Reject.
+
+A tie is equivalent to a rejection, though it should be exceedingly rare given the larger number of voters on the community side, leading at worst to a very long decimal percentage (i.e. ''%%49.999999999%%%''), rather than a full tie.
+
+Voting results are fetched using the [[https://github.com/danog/php-community-rfc/blob/main/gather_votes.php|gather_votes.php]] script, which can be easily run by anyone at any time to get up-to-date voting results with a breakdown of internals and community votes, and the overall outcome.
+
+Note, while it is possible to add some additional requirements for community votes, like minimum age of GitHub accounts, contribution history, packagist activity, etc, they are explicitly absent, for the following reasons:
+
+  * This allows the entire PHP community to vote, including a considerable chunk (if not in size, in importance) which does not normally use GitHub or composer for PHP development (i.e. the Wordpress community)
+  * Basically any additional check (except for government ID verification, which is out of the question) can be bypassed in some way anyway: however, voting occurs through public GitHub reactions, which does allow for maximum transparency, as all community voters can be fetched using the GitHub API, making optional cheating detection in case of suspicion much easier.\\
+
+  * Most importantly: internals has effective veto rights by not voting on the proposal, keeping it under the 50% quorum.  This means that even a (potentially gamed) 99% approval rate from the community can be voted by internals by simply not voting.
+
+GitHub was explicitly chosen both as a replacement to the current voting platform, the existing wiki and mailing lists to greatly improve acessibility and agility.
+
+RFC processes of modern languages like Rust and Go use GitHub for the RFC process: however, the rationale behind choosing GitHub for community RFCs wasn’t “to be more like them”, but genuinely because it’s just a great platform in terms of UX, userbase size and ease of access and use, which is also why it is used by other languages.
+
+=== Design document ===
+
+Once a community RFC is accepted, a design document must be committed to the repo, and kept updated with breaking/non-breaking changes: however, a fully detailed design document with full rationale, pro/counter arguments that will be turned into a full RFC is NOT required.
+
+The committed design document can be a simple overview of the features, the API, and a link to the community RFC issue.\\
+This is done because of the inherently mutable nature of php-community features: changes will likely be frequent, and updating rationale, examples and everything else that a full RFC requires will be mostly wasted work.\\
+The design document should be finalized, including full examples, major arguments from the community discussion and community feedback and adoption data only when turning it into a normal RFC.
+
+=== Conversion into normal RFCs ===
+
+Once a community RFC is accepted and community adoption of the newly introduced features reaches a threshold (at the discretion of who proposed and implemented the community RFC, with involvement of the community), and in any case **at least** 6 months after its inclusion into a stable tag of ''%%php-community%%'', a normal RFC can be proposed for inclusion into the main language.
+
+The 6 months lower limit before conversion into a normal RFC is pretty much the only “hard” limit in community RFCs: with an excessively short feedback time authors may end up making RFCs without significant community adoption/feedback, which is essentially equivalent to doing RFCs with the old process.
+
+=== Community RFC owners ===
+
+The community RFC design document must contain the full list of the current maintainer(s)/owner(s) of the features, which can be updated by the owners themselves, or by internals members in case of inactivity of any of the owners.
+
+=== Removal of community RFC features ===
+
+If a community RFC is accepted, then converted into a normal RFC, and then the normal RFC for some reason gets rejected, the community RFC is not automatically rejected and its features are not automatically removed from php-community.
+
+Features introduced by an accepted community RFC can only be removed 6 months after it is accepted, through a separate removal community RFC.
+
+A feature is eligible for removal only if **both** of the following conditions are met:
+
+  - It has no active maintainer listed in the accepted community RFC design document.\\
+
+  - Adoption is negligible, as evidenced by Packagist statistics.
+
+The burden of proof lies with the party proposing removal, not with users. When a removal community RFC is accepted, a deprecation period of at least 3 stable ''%%php-community%%'' releases follows, during which the feature is still shipped but marked as deprecated, giving users time to speak up (which can potentially move the RFC back to Active or Pending), take over maintenance (which will automatically reject the removal RFC, even if already accepted), or migrate away.
+
+This prevents removal of an actively-maintained, well-adopted feature through this process; equally, this lifts from php-src contributors the burden of indefinitely maintaining a dead one.
+
+The above process is inspired by Linux’s own unused feature removal process.
+
+=== Discussion process ===
+
+As always, discussion is open to everyone.
+
+The **key difference** between a community RFC discussion and a normal RFC discussion is that it should **not** be as heavily focused on whether it will be accepted or not by the larger community, the impact on frameworks, et cetera: it will be up the community to decide whether or not it will be used (including through packagist statistics).
+
+In other words, discussion should follow mainly the same themes of a normal RFC discussion, just much lighter, without assuming anything in regards on adoption (or non-adoption) and impact on the community.
+
+Crucially, the implementation details (API, actual code) of the feature at this stage should not be grounds to accept or reject a feature: more control is given to the author of the community RFC in this sense, who will effectively act just like a simple library or extension maintainer, making major design choices mostly autonomously during the initial stages of the community RFC, and according to community feedback mostly **after** the community RFC is accepted and released.
+
+=== Backoff period ===
+
+There is no backoff period between similar RFCs: a v2 of the community RFC can be proposed a day after v1 is rejected for some reason.
+
+==== The php-community release process ====
+
+Versioning will be date-based, i.e. ''%%php-community 2026.01.01%%''.
+
+''%%php-community%%'' will always be based on the latest stable PHP release, and will be released according to the following schedule:
+
+  * One stable release every month, the first Thursday of the month.\\
+
+  * Security releases do not postpone the main release schedule, even if it means making two releases in two days, i.e. the 31st and the 1st (''%%php-community 2026.01.31%%'' and ''%%php-community 2026.02.01%%''), or the 1st and the 2nd (''%%php-community 2026.02.01%%'' and ''%%php-community 2026.02.02%%'').\\
+
+  * Full nightly releases (with binaries) every day for even faster iteration (''%%php-community-nightly 2026.01.01%%'').
+
+''%%php-community%%'' will live on a new ''%%community%%'' branch of ''%%php-src%%''.
+
+Community releases are “handled” by the same release managers of the latest stable PHP release, however the release process will be significantly automated, compared to the current manual release process: binary, packaged and source releases for both stable and nightly will be reproducible, auto-built and published to ''%%php.net%%'' by Github Actions on php-src, without human involvement (which also improves security).
+
+Release managers only need to:
+
+  * Branch off ''%%community-202X.XX.XX%%'' from ''%%community%%''
+  * Wait for the CI status of the new branch to become green
+  * Create a new ''%%php-community-202X.XX.XX%%'' tag
+  * Wait for the CI status of the tag to become green, which will automatically build and stage all binaries and packages for all platforms.
+
+The final deployment step, deploying all staged binaries and packages and sending off an email to the mailing lists will also be automatic, based on the statuses of all builds for all platforms.
+
+Human involvement is only needed in case of errors in any of the CI jobs, fixed by committing first to the ''%%community%%'' branch, then pushing to the ''%%community-202X.XX.XX%%'' branch, eventually re-creating the ''%%php-community-202X.XX.XX%%'' tag if the failure occurred only in the tag CI build.
+
+==== Feature extensions ====
+
+Core language behavior and features can be defined by optionally enabled, but always built-in **feature extensions**.
+
+Taking as an example features already merged in PHP, deprecations can be provided as a versioned ''%%performance%%'' or ''%%strict%%'' extension:
+
+  * 1.0 - “Implicitly nullable parameter declarations deprecated” (from 8.4)
+  * 2.0 - “Non-canonical scalar type casts (boolean|double|integer|binary) deprecated” (from 8.5)
+  * 3.0 - Some other upcoming deprecation
+  * Et cetera.
+
+Some feature extensions (like the ''%%performance%%'' extension above) may be provided in multiple versions at the same time, exposed through an appropriate API.
+
+Feature extensions may require or conflict with specific or range-based versions of other feature extensions, like Composer packages.
+
+A new ''%%PhpFeature%%'' class is offered to get info about available features and enable a specific version of a given **feature extension** at runtime: once enabled, the version cannot be changed.
+
+The main intended usecase is integration into Composer through an ''%%ext-X%%'' dependency (or even ''%%feature-X%%''), which will be automatically enabled by the composer autoloader according to package requirements.
+
+Apart from core language behavior, feature extensions may just be normal, community extensions being considered for inclusion into future PHP versions.
+
+All features merged into php-community will be fully documented on php.net, just as if they were normal language features.
+
+Feature extensions are enabled using a simple [[#api|method call »]].
+
+//Feature extensions// **cannot** be enabled using php.ini, to allow enabling features on webhosts: however, to allow for proper sandboxing and thus webhost adoption, a new universal **sandboxing level** configuration key is added to ''%%php.ini%%'', effectively offering the same protection offered by ''%%disable_functions%%'' et al, for all feature extensions, without the need to search which specific functions and features to disable.
+
+The ''%%sandboxing_level%%'' ''%%php.ini%%'' is a comma-separated list of sandbox keys, which may be combined as needed.
+
+Sandbox keys affect all functionality offered by feature extensions, as well as functionality offered by PHP itself.
+
+The following sandbox keys are proposed:
+
+  * ''%%proc_exec%%'': Disables all OS-level process spawning and execution (''%%exec%%'', ''%%shell_exec%%'', ''%%system%%'', ''%%passthru%%'', ''%%popen%%'', ''%%proc_open%%'', ''%%proc_close%%'', ''%%proc_get_status%%'', ''%%proc_nice%%'', ''%%proc_terminate%%'', and all equivalent functionality offered by feature extensions). The single most universally applied restriction on shared hosts.
+  * ''%%pcntl%%'': Disables POSIX process control (''%%pcntl_exec%%'', ''%%pcntl_fork%%'', ''%%pcntl_signal%%'', ''%%pcntl_waitpid%%'', ''%%pcntl_wifexited%%'', and all equivalent functionality offered by feature extensions). Prevents forking new processes even without shell access.
+  * ''%%posix_privileges%%'': Disables POSIX privilege-manipulation and signal functions (''%%posix_kill%%'', ''%%posix_setuid%%'', ''%%posix_setgid%%'', ''%%posix_seteuid%%'', ''%%posix_setegid%%'', ''%%posix_setpgid%%'', ''%%posix_setsid%%'', and all equivalent functionality offered by feature extensions). Prevents privilege escalation and cross-process signalling.
+  * ''%%info%%'': Disables functions that expose system internals and user/group databases (''%%phpinfo%%'', ''%%php_uname%%'', ''%%posix_getpwuid%%'', ''%%posix_getpwnam%%'', ''%%posix_getgrgid%%'', ''%%posix_getgrnam%%'', ''%%posix_getlogin%%'', and all equivalent functionality offered by feature extensions). Reduces information available to an attacker.
+  * ''%%eval%%'': Disables dynamic code evaluation (''%%eval%%'', ''%%create_function%%'', and all equivalent functionality offered by feature extensions).
+
+Note: the first community RFC may indeed be the one regarding the choice of appropriate sandbox keys.
+
+==== API ====
+
+What follows is the description of the API used to manage feature extensions.
+
+<code php>
+/**
+ * @type TPackage = array{
+ *           name: string,
+ *           version: string,
+ *           type: "feature",
+ *           description?: string,
+ *           require?: array<string, string>,
+ *           conflict?: array<string, string>,
+ *           replace?: array<string, string>,
+ *           provide?: array<string, string>,
+ *           suggest?: array<string, string>,
+ *       }
+ */
+final class PhpFeature {
+    /**
+     * Fetches all available feature extensions.
+     * 
+     * name => (version => PhpFeature)
+     * @return array<string, array<string, self>>
+     */
+    public static function getAllFeatures(): array;
+
+    /**
+     * Fetches all available feature extensions, 
+     * formatted as the `packages` field of a 
+     * Composer repository, for easy integration.
+     * 
+     * name => (version => TPackage)
+     * @return array<string, array<string, TPackage>>
+     */
+    public static function getAllFeaturesArray(): array; 
+
+    /**
+     * Returns all currently enabled feature extensions.
+     * 
+     * 
+     * name => PhpFeature
+     * @return array<string, PhpFeature>
+     */
+    public static function getEnabledFeatures(): array;
+
+    /**
+     * Checks if a feature exists, or if a (possibly constrained) version of a feature exists.  
+     */
+    public static function has(string $feature, ?string $version = null): bool;
+
+    /**
+     * Fetches a feature extension by its name and its exact or constrainted version.  
+     * 
+     * I.e. Feature::get("performance", "^2")->enable()
+     * 
+     * @throws RuntimeException If the specified feature extension or version cannot be found. 
+     */
+    public static function get(string $feature, string $version): self;
+
+    /**
+     * Checks if the feature can be enabled. 
+     * 
+     * Returns true if the feature is already enabled. 
+     * 
+     * Returns false if any of the currently loaded
+     * feature extensions conflict with the current feature extension.
+     * 
+     * Returns false if the current feature cannot be enabled at runtime.  
+     */
+    public function canEnable(): bool;
+    /**
+     * Checks if the feature can be enabled at runtime, or only at compiletime with a #![feature()]. 
+     * 
+     * Returns true if the current feature can be enabled at runtime.  
+     * 
+     * Returns false if the current feature can only be enabled with a #![feature()].
+     * 
+     * Unlike canEnable, does not check for conflicts with currently loaded features.  
+     */
+    public function canEnableAtRuntime(): bool;
+    /**
+     * Checks if the feature is already enabled.
+     */
+    public function isEnabled(): bool;
+    /**
+     * Enables the feature.
+     * 
+     * @throws RuntimeException If the feature cannot be enabled due to conflicts of already loaded extensions with either the current feature or of features on which this feature depends, or if it can only be enabled at runtime.
+     */
+    public function enable(): void;
+
+    /**
+     * Gets the feature name.
+     */
+    public function getName(): string;
+    /**
+     * Gets the feature's version.
+     */
+    public function getVersion(): string;
+    /**
+     * Gets the feature's description.
+     */
+    public function getDescription(): ?string;
+
+    /**
+     * Returns info about the feature in composer.json format.  
+     * 
+     * @return TPackage
+     */
+    public function toComposer(): array;
+}
+</code>
+
+The API is designed to be easily integrated into Composer, but also used standalone without it.
+
+Standalone, non-composer users can enable features, and check for conflicts with currently loaded features before enabling a feature.
+
+More complex ''%%requires(self $other)%%'', ''%%conflicts(self $other)%%'', ''%%getDependencies(): list<self>%%'', etc. methods are omitted for simplicity, delegating dependency resolution through SAT solving to Composer.
+
+Note: some features which might be hard to enable at runtime, like JIT, though this specific example is debatable, ideally all features can and should be designed to be enablable at runtime, this is already the case for features like ''%%strict_types=1%%'' at a file level, i.e. JIT may be harder but is not impossible through appropriate execution state isolation.
+
+For features which are truly too hard or too expensive to enable at runtime, a separate, compile-time way to enable them is provided through ''%%#![feature()]%%'', only applied for **entry points**.
+
+The syntax is fully-backwards compatible (parses fine even on PHP 5), and is closely inspired by Rust:
+
+<code php>
+#![feature(feature_1: "^1", feature_2: "^0.1")]
+</code>
+
+The above declaration in ''%%index.php%%'', or any other entry point, will enable the listed features (if present in the current release, and unless conflicts between the specified features arise): the enablement state will be reflected in the runtime ''%%PhpFeature%%'' API.
+
+As a possible exception to the entry-point rule, the file pointed to by the first require/include statement of an entry point may also be preemptively parsed (potentially recursively) at compile time to scan for the ''%%#![feature()]%%'' statement: this would allow the autogenerated Composer autoloader, if included in the first statement (usually the case), to enable compile-time features through a ''%%#![feature()]%%'' statement on top of the autoloader.
+
+Given the manual entry-point requirement for ''%%#![feature()]%%'', most features should be designed to be enabled at runtime.
+
+Runtime-enablable features may **not** be enabled using ''%%#![feature()]%%'' (to avoid syncing manually enabled features with composer-based requirements).
+
+As mentioned before, ''%%php.ini%%'' is explicitly excluded from enablement modes, as due to its elevated attack surface, it cannot be changed on most shared hosts, defeating the main purpose of this RFC, which is to allow the **entire** PHP community to “preview” future language changes in an easily accessible manner.
