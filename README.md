@@ -126,7 +126,7 @@ Note, while it is possible to add some additional requirements for community vot
 
 GitHub was explicitly chosen both as a replacement to the current voting platform, the existing wiki and mailing lists to greatly improve acessibility and agility.  
 
-RFC processes of modern languages like Rust and Go use GitHub for the RFC process: the rationale behind choosing GitHub for community RFCs wasn't "to be more like them", but genuinely because it's just a great platform in terms of UX, userbase size and ease of access and use.  
+RFC processes of modern languages like Rust and Go use GitHub for the RFC process: however, the rationale behind choosing GitHub for community RFCs wasn't "to be more like them", but genuinely because it's just a great platform in terms of UX, userbase size and ease of access and use, which is also why it is used by other languages.  
 
 #### Design document
 
