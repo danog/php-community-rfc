@@ -4,6 +4,7 @@
   * Author: Daniil Gentili, daniil.gentili@gmail.com
   * Status: Under Discussion
   * Repo of the RFC itself: https://github.com/danog/php-community-rfc
+  * Discussion thread: https://externals.io/message/130313
 
 ===== Table of Contents =====
 

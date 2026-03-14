@@ -45,6 +45,8 @@ $dokuwiki = preg_replace('/^={6}[^=]+={6}\s*\n/m', '', $dokuwiki, 1) ?? $dokuwik
 // ── 4. Fix unlabelled <code> blocks → <code php> ─────────────────────────────
 $dokuwiki = preg_replace('/^<code>$/m', '<code php>', $dokuwiki) ?? $dokuwiki;
 
+$dokuwiki = preg_replace('/.*Click here to read the discussion thread.*/', '', $dokuwiki) ?? $dokuwiki;
+
 // ── 5. Fix internal anchor links: replace - with _ in slugs ──────────────────
 //   DokuWiki anchor IDs use underscores, not hyphens.
 //   Matches [[#some-slug]] and [[#some-slug|Label text]].
@@ -66,6 +68,7 @@ $header = <<<HEADER
   * Author: Daniil Gentili, daniil.gentili@gmail.com
   * Status: Under Discussion
   * Repo of the RFC itself: https://github.com/danog/php-community-rfc
+  * Discussion thread: https://externals.io/message/130313
 
 
 HEADER;
