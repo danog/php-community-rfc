@@ -117,7 +117,7 @@ Allowed state changes:
 Voting is immediately open (at the Pending stage), and occurs through:
 
   * Simple GitHub 👍 = Accept, 👎 = Reject reactions on the issue, open to the entire PHP community, accounting for 50% of votes, simple majority.
-  * internals members through GitHub 👍 = Accept, 👎 = Reject, 👀 = Abstain reactions on the issue using their GitHub accounts, accounting for 50% of votes, simple majority.
+  * internals members with voting rights through GitHub 👍 = Accept, 👎 = Reject, 👀 = Abstain reactions on the issue using their GitHub accounts, accounting for 50% of votes, simple majority.
 
 Voting ends:
 
