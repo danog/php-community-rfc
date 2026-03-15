@@ -273,6 +273,12 @@ Allowing multiple versions in one release and conditional activation is mainly a
 
 Deprecation/removal features, allow, for example, a performance improvement feature extension which genuinely significantly improves performance, in exchange for a more radical approach to deprecations, but again, with more immediate feedback from users which wish to have more performance and already have strict enough codebases to allow for a more radical approach (and strictly opt-in!).
 
+Ideally, php-community releases will come with all major versions (i.e. ^1=1.1 + ^2=2.1 + ^3=3.0, not 1.0 + 1.1 + 2.0 + 2.1 + 3.0) of all feature extensions shipped together.
+
+Security updates are provided to all versions currently shipping in php-community releases.
+
+Removal of old major versions happens at the discretion of feature owners, based on adoption statistics.
+
 Feature extensions may require or conflict with specific or range-based versions of other feature extensions, like Composer packages.
 
 A new ''%%PhpFeature%%'' class is offered to get info about available features and enable a specific version of a given **feature extension** at runtime: once enabled, the version cannot be changed.
