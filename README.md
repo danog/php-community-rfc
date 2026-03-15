@@ -18,7 +18,9 @@
     - [Discussion process](#discussion-process)
     - [Backoff period](#backoff-period)
   - [The php-community release process](#the-php-community-release-process)
+  - [Requirements to succeed](#requirements-to-succeed)
   - [Feature extensions](#feature-extensions)
+  - [Sandboxing](#sandboxing)
   - [API](#api)
 
 ## Introduction
@@ -118,6 +120,8 @@ Voting ends:
   
 Results are valid if at least 50% of internals has voted with either Accept or Reject.  
 
+This means that internals has veto rights, if 50%+1 of internals members either votes Abstain, or abstains from voting altogether.  
+
 A tie is equivalent to a rejection, though it should be exceedingly rare given the larger number of voters on the community side, leading at worst to a very long decimal percentage (i.e. `49.999999999%`), rather than a full tie.  
 
 Voting results are fetched using the [gather_votes.php](https://github.com/danog/php-community-rfc/blob/main/gather_votes.php) script, which can be easily run by anyone at any time to get up-to-date voting results with a breakdown of internals and community votes, and the overall outcome.  
@@ -150,6 +154,22 @@ The 6 months lower limit before conversion into a normal RFC is pretty much the 
 
 The community RFC design document must contain the full list of the current maintainer(s)/owner(s) of the features, which can be updated by the owners themselves, or by internals members in case of inactivity of any of the owners.  
 
+Crucially, the maintenance burden of feature extensions will lay **exclusively** on the feature owners, not `php-src` maintainers.  
+
+Features and bug fixes for feature extensions will **NOT** be a responsibility
+of `php-src` maintainers.  
+
+This also includes reviews on feature extension code, which will be a responsibility mainly of the owners of said features.  
+
+Of course, a more detailed review on behalf of php-src maintainers is still preferable for the initial addition PR, but it is not required (even if obviously still allowed) for subsequent PRs.  
+
+In other words, feature extensions are "guests" allowed into the php-community branch, or PIE extensions "pre-installed" into PHP, and are developed and maintained exclusively by their owners just as if they were a standalone extension, with some overview from `php-src` maintainers, yet maintaining independence on design/API choices (again, as if they were standalone extensions).  
+
+Developers outside of the feature owners should only need to touch feature extension code when introducing breaking changes to extension APIs, like is already the case now for core extensions.  
+
+This is actually very close to the approach used by linux: drivers are owned and maintained each by their own maintainers: non-maintainers need to touch driver code only when authoring breaking changes to inner Linux APIs which affect drivers.  
+
+
 #### Removal of community RFC features
 
 If a community RFC is accepted, then converted into a normal RFC, and then the normal RFC for some reason gets rejected, the community RFC is not automatically rejected and its features are not automatically removed from php-community.  
@@ -166,6 +186,10 @@ The burden of proof lies with the party proposing removal, not with users. When 
 This prevents removal of an actively-maintained, well-adopted feature through this process; equally, this lifts from php-src contributors the burden of indefinitely maintaining a dead one.  
 
 The above process is inspired by Linux's own unused feature removal process.  
+
+**Note**: this is not all too different from the current state of PHP: there is a large amount of extension code in `php-src` which is only there because it was added a long time ago to cover a specific usecase, and is still there even if technology has moved on and that feature is no longer in use by the majority of the PHP userbase (thinking about legacy db drivers).
+
+In php-community, actual, real adoption statistics will be available through packagist, making removal actually a lot easier.  
 
 #### Discussion process
 
@@ -195,6 +219,10 @@ Versioning will be date-based, i.e. `php-community 2026.01.01`.
 
 `php-community` will live on a new `community` branch of `php-src`.  
 
+Package maintainers are expected to rely on specific versions of feature extensions (i.e. `feature-performance:^2`), **not** on specific releases of php-community.  
+
+The [PhpFeature API &raquo;](#api) and scaffolding code will itself be exposed as a versioned, always-enabled `php-community` feature extension.  
+
 Community releases are "handled" by the same release managers of the latest stable PHP release, however the release process will be significantly automated, compared to the current manual release process: binary, packaged and source releases for both stable and nightly will be reproducible, auto-built and published to `php.net` by GitHub Actions on php-src, without human involvement (which also improves security).  
 
 Release managers only need to:
@@ -209,6 +237,16 @@ The final deployment step, deploying all staged binaries and packages and sendin
 
 Human involvement is only needed in case of errors in any of the CI jobs, fixed by committing first to the `community` branch, then pushing to the `community-202X.XX.XX` branch, eventually re-creating the `php-community-202X.XX.XX` tag if the failure occurred only in the tag CI build.  
 
+### Requirements to succeed
+
+In order for `php-community` to succeed at its goal of making experimental features more accessible, major frameworks and libraries need to start relying on features initially only present in `php-community`.  
+
+For this purpose, most new PHP features should get proposed to `php-community` first, instead of normal PHP, in order to speed up adoption of both those features and of `php-community` itself.  
+
+In fact, the normal RFC process could also be altered to **require** all new features to pass through community RFCs, first.  
+
+To further increase adoption, the PHP Feature Extensions API may also be offered on normal PHP versions, either for especially mature feature extensions to get even more adoption data, or for all feature extensions, perhaps even skipping the separate `php-community` distro altogether (though some of its properties like a stable release schedule not movable by security updates is still preferred).  
+
 ### Feature extensions
 
 Core language behavior and features can be defined by optionally enabled, but always built-in **feature extensions**.  
@@ -222,6 +260,10 @@ Taking as an example features already merged in PHP, deprecations can be provide
 
 Some feature extensions (like the `performance` extension above) may be provided in multiple versions at the same time, exposed through an appropriate API.  
 
+Allowing multiple versions in one release and conditional activation is mainly aimed at deprecation/removal features, which are especially easy to ship in multiple versions, and are of the biggest pain points in normal PHP versions, and would be an ever bigger one in an experimental channel if there was no support for concurrent versions.  
+
+Deprecation/removal features, allow, for example, a performance improvement feature extension which genuinely significantly improves performance, in exchange for a more radical approach to deprecations, but again, with more immediate feedback from users which wish to have more performance and already have strict enough codebases to allow for a more radical approach (and strictly opt-in!). 
+
 Feature extensions may require or conflict with specific or range-based versions of other feature extensions, like Composer packages.  
 
 A new `PhpFeature` class is offered to get info about available features and enable a specific version of a given **feature extension** at runtime: once enabled, the version cannot be changed.
@@ -234,11 +276,15 @@ All features merged into php-community will be fully documented on php.net, just
 
 Feature extensions are enabled using a simple [method call &raquo;](#api).  
 
+### Sandboxing
+
 *Feature extensions* **cannot** be enabled using php.ini, to allow enabling features on webhosts: however, to allow for proper sandboxing and thus webhost adoption, a new universal **sandboxing level** configuration key is added to `php.ini`, effectively offering the same protection offered by `disable_functions` et al, for all feature extensions, without the need to search which specific functions and features to disable.  
 
 The `sandboxing_level` `php.ini` is a comma-separated list of sandbox keys, which may be combined as needed.  
 
 Sandbox keys affect all functionality offered by feature extensions, as well as functionality offered by PHP itself.  
+
+It does not cover external extensions that may be installed i.e. through PIE, but they may choose to opt-in and respect sandboxing levels as well, if they wish.  
 
 The following sandbox keys are proposed:
 
@@ -250,6 +296,10 @@ The following sandbox keys are proposed:
 
 
 Note: the first community RFC may indeed be the one regarding the choice of appropriate sandbox keys.  
+
+Sandboxing is absolutely mandatory for the implementation of the main goal of php-community: fast adoption of new features by the entire PHP community, especially shared hosts, which require sandboxing by definition, and cannot be expected to look through the list of changes in all feature extensions bundled in all of the monthly releases of php-community.
+
+In fact, one of the reasons why shared hosts often lag behind PHP versions is the (small, but non-negligible) cost of searching and patching sandbox escape hatches introduced by new PHP versions, so sandboxing, if merged in mainline PHP, may also speed up adoption of even normal PHP upgrades.  
 
 ### API
 
@@ -367,6 +417,8 @@ final class PhpFeature {
 
 The API is designed to be easily integrated into Composer, but also used standalone without it.  
 
+The API could be made available in normal PHP as well, for forward compatibility.  
+
 Standalone, non-composer users can enable features, and check for conflicts with currently loaded features before enabling a feature.  
 
 More complex `requires(self $other)`, `conflicts(self $other)`, `getDependencies(): list<self>`, etc. methods are omitted for simplicity, delegating dependency resolution through SAT solving to Composer.  
@@ -391,3 +443,8 @@ Runtime-enablable features may **not** be enabled using `#![feature()]` (to avoi
 
 
 As mentioned before, `php.ini` is explicitly excluded from enablement modes, as due to its elevated attack surface, it cannot be changed on most shared hosts, defeating the main purpose of this RFC, which is to allow the **entire** PHP community to "preview" future language changes in an easily accessible manner.  
+
+
+### Changelog
+
+#### 1.0.1

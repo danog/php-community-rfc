@@ -30,7 +30,56 @@ if ($pandoc === '') {
     exit(1);
 }
 
-// ── 2. Run pandoc ─────────────────────────────────────────────────────────────
+// ── 2. Regenerate TOC in the markdown file ────────────────────────────────────
+$mdContent = file_get_contents($input);
+if ($mdContent === false) {
+    fwrite(STDERR, "Failed to read input file: $input\n");
+    exit(1);
+}
+
+// Extract all headings (lines starting with #), skip h1 and the TOC heading itself.
+$lines = explode("\n", $mdContent);
+$tocLines = [];
+$minLevel = PHP_INT_MAX;
+foreach ($lines as $line) {
+    if (!preg_match('/^(#{2,6}) (.+)$/', $line, $m)) {
+        continue;
+    }
+    $level = strlen($m[1]);
+    $text  = trim($m[2]);
+    if (strtolower($text) === 'table of contents') {
+        continue;
+    }
+    if ($level < $minLevel) {
+        $minLevel = $level;
+    }
+    // GitHub-style slug: lowercase, spaces→hyphens, keep alphanumerics and hyphens only.
+    $slug = strtolower($text);
+    $slug = preg_replace('/[^\w\s-]/u', '', $slug) ?? $slug;  // strip punctuation
+    $slug = preg_replace('/\s+/', '-', trim($slug)) ?? $slug;
+    $slug = preg_replace('/-+/', '-', $slug) ?? $slug;
+
+    $indent   = str_repeat('  ', $level - $minLevel);
+    $tocLines[] = "{$indent}- [{$text}](#{$slug})";
+}
+
+$newToc = implode("\n", $tocLines);
+
+// Replace the existing TOC block (content between the TOC heading and the next heading).
+$mdContent = preg_replace(
+    '/^(## Table of Contents\n\n).*?(\n\n(?=#{1,6} ))/ms',
+    "$1{$newToc}$2",
+    $mdContent
+) ?? $mdContent;
+
+if (file_put_contents($input, $mdContent) === false) {
+    fwrite(STDERR, "Failed to write updated TOC to: $input\n");
+    exit(1);
+}
+echo "TOC updated in: $input\n";
+
+// ── 3. Run pandoc ─────────────────────────────────────────────────────────────
+// Re-read the (possibly updated) markdown.
 $cmd      = $pandoc . ' ' . escapeshellarg($input) . ' --from=markdown --to=dokuwiki';
 $dokuwiki = shell_exec($cmd);
 
@@ -39,16 +88,16 @@ if ($dokuwiki === null || $dokuwiki === '') {
     exit(1);
 }
 
-// ── 3. Strip the auto-generated title line (first ====== … ======) ───────────
+// ── 4. Strip the auto-generated title line (first ====== … ======) ───────────
 $dokuwiki = preg_replace('/^={6}[^=]+={6}\s*\n/m', '', $dokuwiki, 1) ?? $dokuwiki;
 
-// ── 4. Fix unlabelled <code> blocks → <code php> ─────────────────────────────
+// ── 5. Fix unlabelled <code> blocks → <code php> ─────────────────────────────
 $dokuwiki = preg_replace('/^<code>$/m', '<code php>', $dokuwiki) ?? $dokuwiki;
 
 $dokuwiki = preg_replace('/.*Click here to read the discussion thread.*/', '', $dokuwiki) ?? $dokuwiki;
 $dokuwiki = preg_replace('/.*Click here to read this RFC proposal.*/', '', $dokuwiki) ?? $dokuwiki;
 
-// ── 5. Fix internal anchor links: replace - with _ in slugs ──────────────────
+// ── 6. Fix internal anchor links: replace - with _ in slugs ──────────────────────
 //   DokuWiki anchor IDs use underscores, not hyphens.
 //   Matches [[#some-slug]] and [[#some-slug|Label text]].
 $dokuwiki = preg_replace_callback(
@@ -61,10 +110,10 @@ $dokuwiki = preg_replace_callback(
     $dokuwiki
 ) ?? $dokuwiki;
 
-// ── 6. Prepend the RFC header ─────────────────────────────────────────────────
+// ── 7. Prepend the RFC header ─────────────────────────────────────────────────
 $header = <<<HEADER
 ====== PHP RFC: php-community: a faster-moving, community-driven PHP. ======
-  * Version: 1.0
+  * Version: 1.0.1
   * Date: 2026-03-14
   * Author: Daniil Gentili, daniil.gentili@gmail.com
   * Status: Under Discussion
@@ -76,7 +125,7 @@ HEADER;
 
 $dokuwiki = $header . ltrim($dokuwiki);
 
-// ── 7. Write output ───────────────────────────────────────────────────────────
+// ── 8. Write output ───────────────────────────────────────────────────────────
 if (file_put_contents($output, $dokuwiki) === false) {
     fwrite(STDERR, "Failed to write output to: $output\n");
     exit(1);
