@@ -1,6 +1,7 @@
 # php-community: a faster-moving, community-driven PHP.
 
-[Click here to read the discussion thread &raquo;](https://externals.io/message/130313).  
+[Click here to read this RFC proposal on wiki.php.net &raquo;](https://wiki.php.net/rfc/php-community).  
+[Click here to read the discussion thread on the PHP internals mailing list &raquo;](https://externals.io/message/130313).  
 
 ## Table of Contents
 

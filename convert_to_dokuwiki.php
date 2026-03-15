@@ -46,6 +46,7 @@ $dokuwiki = preg_replace('/^={6}[^=]+={6}\s*\n/m', '', $dokuwiki, 1) ?? $dokuwik
 $dokuwiki = preg_replace('/^<code>$/m', '<code php>', $dokuwiki) ?? $dokuwiki;
 
 $dokuwiki = preg_replace('/.*Click here to read the discussion thread.*/', '', $dokuwiki) ?? $dokuwiki;
+$dokuwiki = preg_replace('/.*Click here to read this RFC proposal.*/', '', $dokuwiki) ?? $dokuwiki;
 
 // ── 5. Fix internal anchor links: replace - with _ in slugs ──────────────────
 //   DokuWiki anchor IDs use underscores, not hyphens.
