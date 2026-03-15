@@ -185,7 +185,9 @@ A feature is eligible for removal only if **both** of the following conditions a
 
 The burden of proof lies with the party proposing removal, not with users. When a removal community RFC is accepted, a deprecation period of at least 3 stable `php-community` releases follows, during which the feature is still shipped but marked as deprecated, giving users time to speak up (which can potentially move the RFC back to Active or Pending), take over maintenance (which will automatically reject the removal RFC, even if already accepted), or migrate away.  
 
-This prevents removal of an actively-maintained, well-adopted feature through this process; equally, this lifts from php-src contributors the burden of indefinitely maintaining a dead one.  
+This prevents removal of an actively-maintained, well-adopted feature through this process, so that users can calmly rely on PHP feature extensions.  
+
+Equally, this lifts from php-src contributors the burden of indefinitely maintaining a dead one.  
 
 The above process is inspired by Linux's own unused feature removal process.  
 
