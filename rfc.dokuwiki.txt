@@ -171,7 +171,7 @@ Of course, a more detailed review on behalf of php-src maintainers is still pref
 
 In other words, feature extensions are “guests” allowed into the php-community branch, or PIE extensions “pre-installed” into PHP, and are developed and maintained exclusively by their owners just as if they were a standalone extension, with some overview from ''%%php-src%%'' maintainers, yet maintaining independence on design/API choices (again, as if they were standalone extensions).
 
-Developers outside of the feature owners should only need to touch feature extension code when introducing breaking changes to extension APIs, like is already the case now for core extensions.
+Fixes to feature extensions due to breaking changes to internal PHP APIs will be handled by whoever is making the breaking changes, not by the feature owners.
 
 This is actually very close to the approach used by linux: drivers are owned and maintained each by their own maintainers: non-maintainers need to touch driver code only when authoring breaking changes to inner Linux APIs which affect drivers.
 
