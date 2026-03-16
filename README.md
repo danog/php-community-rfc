@@ -120,9 +120,9 @@ Voting ends:
 - 2-3 weeks after the issue is moved to the Active stage OR
 - 3 months after the issue is opened
   
-Results are valid if at least 50% of internals has voted with either Accept or Reject.  
+Results are valid if at least 50% of **only internals** has voted with either Accept or Reject.  
 
-This means that internals has veto rights, if 50%+1 of internals members either votes Abstain, or abstains from voting altogether.  
+This means that internals has veto rights, if 50%+1 of **only internals members** either votes Abstain, or abstains from voting altogether.  
 
 A tie is equivalent to a rejection, though it should be exceedingly rare given the larger number of voters on the community side, leading at worst to a very long decimal percentage (i.e. `49.999999999%`), rather than a full tie.  
 
