@@ -23,6 +23,7 @@
   - [Sandboxing](#sandboxing)
   - [API](#api)
   - [Changelog](#changelog)
+    - [1.1.0](#110)
     - [1.0.1](#101)
 
 ## Introduction
@@ -178,12 +179,15 @@ If a community RFC is accepted, then converted into a normal RFC, and then the n
 
 Features introduced by an accepted community RFC can only be removed 6 months after it is accepted, through a separate removal community RFC.  
 
-A feature is eligible for removal only if **both** of the following conditions are met:  
+Removal community RFCs occur through GitHub reactions as usual open to all (in order to gauge community interest), but **only votes of internals are countedd**.  
 
-- It has no active maintainer listed in the accepted community RFC design document.  
-- Adoption is negligible, as evidenced by Packagist statistics.  
+A feature is eligible for removal if:
 
-The burden of proof lies with the party proposing removal, not with users. When a removal community RFC is accepted, a deprecation period of at least 3 stable `php-community` releases follows, during which the feature is still shipped but marked as deprecated, giving users time to speak up (which can potentially move the RFC back to Active or Pending), take over maintenance (which will automatically reject the removal RFC, even if already accepted), or migrate away.  
+- It has no active owners (no commits, and listed owners do not reply to emails in the last 6 months).  
+  An owner may also be removed from the owners list of an RFC by internals members and maintainers in case of violations.  
+- OR, if adoption is negligible, as evidenced by Packagist statistics (or other telemetry, as defined by later RFCs).  
+
+When a removal community RFC is accepted, a deprecation period of at least 1 stable `php-community` release follows, during which the feature is still shipped but marked as deprecated, giving users time to speak up (which can potentially move the RFC back to Active or Pending), take over maintenance (which will automatically reject the removal RFC, even if already accepted), or migrate away.  
 
 This prevents removal of an actively-maintained, well-adopted feature through this process, so that users can calmly rely on PHP feature extensions.  
 
@@ -456,6 +460,24 @@ As mentioned before, `php.ini` is explicitly excluded from enablement modes, as 
 
 
 ### Changelog
+
+#### 1.1.0
+
+- **Voting (clarification)** — Clarified that only internals members with voting rights count for quorum/veto calculations, and emphasized internals-only quorum wording.
+
+- **Community RFC owners (clarification)** — Clarified that compatibility fixes caused by breaking internal PHP API changes are handled by whoever introduces those breaking changes.
+
+- **Removal of community RFC features (policy update)**
+
+Removal voting remains open to all for sentiment, but only internals votes are counted for outcome.
+
+Eligibility changed from strict `AND` conditions to an `OR` policy:
+- no active owners (defined as no commits and no replies from listed owners in 6 months; with owner removal possible in case of violations);
+- or negligible adoption, based on Packagist stats/telemetry.
+
+Deprecation period after acceptance of a removal RFC was reduced from at least 3 stable `php-community` releases to at least 1 stable release.
+
+- **Feature extensions (new clarifications)** — Added guidance that releases should ideally ship all major versions of feature extensions together, that security updates apply to all currently shipped versions, and that retiring old majors is up to feature owners based on adoption.
 
 #### 1.0.1
 
